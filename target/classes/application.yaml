@@ -1,0 +1,18 @@
+server:
+  port: 8000
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/lib
+    username: root
+    password: 123456
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isDelete #默认deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: false
