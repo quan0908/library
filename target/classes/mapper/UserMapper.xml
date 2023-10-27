@@ -7,20 +7,21 @@
     <resultMap id="BaseResultMap" type="com.lib.model.entity.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="account" column="account" jdbcType="VARCHAR"/>
-            <result property="userName" column="userName" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="idCard" column="idCard" jdbcType="CHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>
             <result property="foulTimes" column="foulTimes" jdbcType="INTEGER"/>
-            <result property="role" column="role" jdbcType="TINYINT"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,account,userName,
-        idCard,password,foulTimes,
-        role,createTime,updateTime,
-        isDelete
+        id,account,username,
+        idCard,password,userAvatar,
+        foulTimes,role,createTime,
+        updateTime,isDelete
     </sql>
 </mapper>
