@@ -1,16 +1,23 @@
 package com.lib.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lib.annotation.AuthCheck;
 import com.lib.common.BaseResponse;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
 import com.lib.common.ResultUtils;
+import com.lib.constant.UserConstant;
+import com.lib.exception.BusinessException;
+import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.book.BookAddRequest;
+import com.lib.model.dto.book.BookQueryRequest;
 import com.lib.model.dto.book.BookUpdateRequest;
+import com.lib.model.entity.Book;
 import com.lib.model.vo.BookVO;
 import com.lib.service.BookService;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -23,9 +30,49 @@ public class BookController {
     @Resource
     private BookService bookService;
 
-    @GetMapping("/get/books")
-    public BaseResponse<List<BookVO>> getBooks(){
-        return ResultUtils.success(bookService.getBooks());
+    /**
+     * 分页获取图书列表
+     *
+     * @param bookQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    public BaseResponse<Page<Book>> listBookByPage(@RequestBody BookQueryRequest bookQueryRequest,
+                                                   HttpServletRequest request) {
+        long current = bookQueryRequest.getCurrent();
+        long size = bookQueryRequest.getPageSize();
+
+        Page<Book> bookPage = bookService.page(new Page<>(current, size),
+                bookService.getQueryWrapper(bookQueryRequest));
+
+        return ResultUtils.success(bookPage);
+    }
+
+    /**
+     * 分页获取用户封装列表
+     *
+     * @param bookQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page/vo")
+    public BaseResponse<Page<BookVO>> listBookVOByPage(@RequestBody BookQueryRequest bookQueryRequest,
+                                                       HttpServletRequest request) {
+        if (bookQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long current = bookQueryRequest.getCurrent();
+        long size = bookQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        Page<Book> bookPage = bookService.page(new Page<>(current, size),
+                bookService.getQueryWrapper(bookQueryRequest));
+        Page<BookVO> bookVOPage = new Page<>(current, size, bookPage.getTotal());
+        List<BookVO> bookVO = bookService.getBookVO(bookPage.getRecords());
+        bookVOPage.setRecords(bookVO);
+        return ResultUtils.success(bookVOPage);
     }
 
     /**
@@ -34,6 +81,7 @@ public class BookController {
      * @return
      */
     @PostMapping("/add")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Void> addBook(@RequestBody BookAddRequest bookAddRequest){
         if(bookService.addBook(bookAddRequest)){
             return ResultUtils.success(null);
@@ -47,6 +95,7 @@ public class BookController {
      * @return
      */
     @PostMapping("/update")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Void> updateBook(@RequestBody BookUpdateRequest bookUpdateRequest){
         if(bookService.updateBook(bookUpdateRequest)){
             return ResultUtils.success(null);
@@ -60,6 +109,7 @@ public class BookController {
      * @return
      */
     @PostMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Void> deleteBook(@RequestBody DeleteRequest deleteRequest){
         if(bookService.deleteBook(deleteRequest)){
             return ResultUtils.success(null);

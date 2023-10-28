@@ -24,12 +24,12 @@ public class BookBorrowRecord implements Serializable {
     /**
      * 借阅用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 借阅图书id
      */
-    private String bookId;
+    private Long bookId;
 
     /**
      * 借阅天数

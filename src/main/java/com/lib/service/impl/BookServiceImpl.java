@@ -1,23 +1,29 @@
 package com.lib.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
+import com.lib.constant.CommonConstant;
 import com.lib.exception.BusinessException;
 import com.lib.model.dto.book.BookAddRequest;
+import com.lib.model.dto.book.BookQueryRequest;
 import com.lib.model.dto.book.BookUpdateRequest;
 import com.lib.model.entity.Book;
+import com.lib.model.entity.User;
 import com.lib.model.vo.BookVO;
+import com.lib.model.vo.UserVO;
 import com.lib.service.BookService;
 import com.lib.mapper.BookMapper;
+import com.lib.utils.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author vv
@@ -26,18 +32,45 @@ import java.util.List;
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     implements BookService{
     /**
-     * 获取全部图书
+     * 获取图书查询条件
+     * @param bookQueryRequest 图书查询请求
      * @return
      */
     @Override
-    public List<BookVO> getBooks() {
-        List<Book> bookList = this.list();
-        //将bookList中的book转成bookVo
-        List<BookVO> bookVOList = new ArrayList<>();
-        for(Book book : bookList){
-            bookVOList.add(BookVO.objToVo(book));
+    public QueryWrapper<Book> getQueryWrapper(BookQueryRequest bookQueryRequest) {
+        if (bookQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
-        return bookVOList;
+
+        String bookName = bookQueryRequest.getBookName();
+        String type = bookQueryRequest.getType();
+        String sortField = bookQueryRequest.getSortField();
+        String sortOrder = bookQueryRequest.getSortOrder();
+
+        QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(StringUtils.isNotBlank(bookName), "bookName", bookName);
+        queryWrapper.like(StringUtils.isNotBlank(type), "type", type);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                sortField);
+        return queryWrapper;
+    }
+
+    @Override
+    public List<BookVO> getBookVO(List<Book> bookList) {
+        if (CollectionUtils.isEmpty(bookList)) {
+            return new ArrayList<>();
+        }
+        return bookList.stream().map(this::getBookVO).collect(Collectors.toList());
+    }
+
+    @Override
+    public BookVO getBookVO(Book book) {
+        if (book == null) {
+            return null;
+        }
+        BookVO bookVO = new BookVO();
+        BeanUtils.copyProperties(book, bookVO);
+        return bookVO;
     }
 
     /**

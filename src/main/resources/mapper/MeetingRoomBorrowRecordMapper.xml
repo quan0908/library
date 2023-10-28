@@ -6,8 +6,9 @@
 
     <resultMap id="BaseResultMap" type="com.lib.model.entity.MeetingRoomBorrowRecord">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="VARCHAR"/>
-            <result property="meetingRoomId" column="meetingRoomId" jdbcType="VARCHAR"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="meetingRoomId" column="meetingRoomId" jdbcType="BIGINT"/>
+            <result property="isReturn" column="meetingRoomId" jdbcType="INTEGER"/>
             <result property="borrowTime" column="borrowTime" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>

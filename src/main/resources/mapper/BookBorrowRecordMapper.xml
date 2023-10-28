@@ -6,8 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.lib.model.entity.BookBorrowRecord">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="VARCHAR"/>
-            <result property="bookId" column="bookId" jdbcType="VARCHAR"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
             <result property="borrowDays" column="borrowDays" jdbcType="INTEGER"/>
             <result property="isReturned" column="isReturned" jdbcType="TINYINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>

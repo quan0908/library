@@ -1,11 +1,16 @@
 package com.lib.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lib.common.DeleteRequest;
 import com.lib.model.dto.book.BookAddRequest;
+import com.lib.model.dto.book.BookQueryRequest;
 import com.lib.model.dto.book.BookUpdateRequest;
+import com.lib.model.dto.user.UserQueryRequest;
 import com.lib.model.entity.Book;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lib.model.entity.User;
 import com.lib.model.vo.BookVO;
+import com.lib.model.vo.UserVO;
 
 import java.util.List;
 
@@ -14,10 +19,28 @@ import java.util.List;
 */
 public interface BookService extends IService<Book> {
     /**
-     * 查询图书馆内全部图书
-     * @return BookVO
+     * 获取查询条件
+     *
+     * @param bookQueryRequest 图书查询请求
+     * @return
      */
-    List<BookVO> getBooks();
+    QueryWrapper<Book> getQueryWrapper(BookQueryRequest bookQueryRequest);
+
+    /**
+     * 获取全部图书信息
+     *
+     * @param bookList 图书集合
+     * @return
+     */
+    List<BookVO> getBookVO(List<Book> bookList);
+
+    /**
+     * 获取图书信息VO
+     *
+     * @param book
+     * @return
+     */
+    BookVO getBookVO(Book book);
 
     /**
      * 添加图书
@@ -27,7 +50,7 @@ public interface BookService extends IService<Book> {
     boolean addBook(BookAddRequest bookAddRequest);
 
     /**
-     *
+     * 修改图书
      * @param bookUpdateRequest 图书修改请求
      * @return 是否修改成功
      */
