@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.lib.model.entity.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="account" column="account" jdbcType="VARCHAR"/>
-            <result property="userName" column="userName" jdbcType="VARCHAR"/>
+            <result property="username" column="userName" jdbcType="VARCHAR"/>
             <result property="idCard" column="idCard" jdbcType="CHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="foulTimes" column="foulTimes" jdbcType="INTEGER"/>

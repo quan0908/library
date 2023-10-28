@@ -1,11 +1,6 @@
 package com.lib.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-
 import com.lib.annotation.AuthCheck;
 import com.lib.common.BaseResponse;
 import com.lib.common.DeleteRequest;
@@ -20,15 +15,13 @@ import com.lib.model.vo.LoginUserVO;
 import com.lib.model.vo.UserVO;
 import com.lib.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户接口
@@ -134,11 +127,26 @@ public class UserController {
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
+
+
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        String username = userAddRequest.getUsername();
+        String account = userAddRequest.getAccount();
+        String password = userAddRequest.getPassword();
+        String idCard = userAddRequest.getIdCard();
+
+        if (StringUtils.isAnyBlank(account, password , idCard, username)) {
+
+                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+
+        }
         User user = new User();
         BeanUtils.copyProperties(userAddRequest, user);
+        password = userService.encryptPassword(user.getPassword());
+        user.setPassword(password);
+
         boolean result = userService.save(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(user.getId());
