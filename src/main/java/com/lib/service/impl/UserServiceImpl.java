@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
             }
             // 2. 加密
-            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
+            String encryptPassword = encryptPassword(password);
             // 3. 插入数据
             User user = new User();
             user.setAccount(account);
@@ -87,6 +87,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
             return user.getId();
         }
+    }
+
+    public String encryptPassword(String password){
+        return DigestUtils.md5DigestAsHex((SALT + password).getBytes());
     }
 
     @Override
@@ -230,6 +234,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userList.stream().map(this::getUserVO).collect(Collectors.toList());
     }
 
+
+
     @Override
     public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
         if (userQueryRequest == null) {
@@ -237,12 +243,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         Long id = userQueryRequest.getId();
         String username = userQueryRequest.getUsername();
-        String userRole = userQueryRequest.getRole();
+        String role = userQueryRequest.getRole();
+        String idCard = userQueryRequest.getIdCard();
         String sortField = userQueryRequest.getSortField();
         String sortOrder = userQueryRequest.getSortOrder();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(id != null, "id", id);
-        queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
+        queryWrapper.eq(idCard != null, "idCard", idCard);
+        queryWrapper.eq(StringUtils.isNotBlank(role), "role", role);
         queryWrapper.like(StringUtils.isNotBlank(username), "username", username);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);

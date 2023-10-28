@@ -23,14 +23,19 @@ public class UserAddRequest implements Serializable {
     private String account;
 
     /**
-     * 用户头像
+     * 身份证号
      */
-    private String userAvatar;
+    private String idCard;
 
     /**
-     *
+     *角色
      */
     private String role;
+
+    /**
+     * 密码
+     */
+    private String password;
 
     private static final long serialVersionUID = 1L;
 }

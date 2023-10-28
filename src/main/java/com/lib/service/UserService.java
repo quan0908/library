@@ -35,6 +35,7 @@ public interface UserService extends IService<User> {
      */
     LoginUserVO userLogin(String account, String password, HttpServletRequest request);
 
+    String encryptPassword(String password);
 
 
     /**

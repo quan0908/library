@@ -22,17 +22,17 @@ public interface UserConstant {
     /**
      * 超级管理员角色
      */
-    String SUPER_ADMIN = "super_admin";
+    String SUPER_ADMIN = "superAdmin";
 
     /**
      * 图书管理员
      */
-    String BOOK_ADMIN = "book_admin";
+    String BOOK_ADMIN = "bookAdmin";
 
     /**
      * 会议室管理员
      */
-    String MEETING_ROOM_ADMIN = "meeting_room_admin";
+    String MEETING_ROOM_ADMIN = "meetingRoomAdmin";
     /**
      * 被封号
      */
