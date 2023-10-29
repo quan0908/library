@@ -18,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -287,5 +289,15 @@ public class UserController {
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * 方便起见，转base64后直接存储到数据库
+     * @return
+     */
+    @PostMapping("/upload/userAvatar")
+    public BaseResponse<String> updateUserAvatar(@RequestPart("file") MultipartFile multipartFile){
+
+        return ResultUtils.success("");
     }
 }
