@@ -1,7 +1,7 @@
 package com.lib.model.vo;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.lib.model.entity.Book;
-import com.lib.model.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -15,10 +15,11 @@ public class BookVO implements Serializable {
     /**
      * 图书id
      */
+    @TableId
     private Long id;
 
     /**
-     * 图书名字
+     * 图书名
      */
     private String bookName;
 
@@ -28,7 +29,7 @@ public class BookVO implements Serializable {
     private Integer bookNumber;
 
     /**
-     * 图书类型
+     * 图书分类
      */
     private String type;
 
@@ -36,6 +37,16 @@ public class BookVO implements Serializable {
      * 图书位置
      */
     private String bookLocation;
+
+    /**
+     * 图书作者
+     */
+    private String bookAuthor;
+
+    /**
+     * 图书简介
+     */
+    private String bookTra;
 
     private static final long serialVersionUID = 1L;
 

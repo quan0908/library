@@ -15,7 +15,7 @@ public class BookUpdateRequest implements Serializable {
     private Long bookId;
 
     /**
-     * 图书名字
+     * 图书名
      */
     private String bookName;
 
@@ -25,7 +25,7 @@ public class BookUpdateRequest implements Serializable {
     private Integer bookNumber;
 
     /**
-     * 图书类型
+     * 图书分类
      */
     private String type;
 
@@ -33,5 +33,21 @@ public class BookUpdateRequest implements Serializable {
      * 图书位置
      */
     private String bookLocation;
+
+    /**
+     * 图书作者
+     */
+    private String bookAuthor;
+
+    /**
+     * 图书简介
+     */
+    private String bookTra;
+
+    /**
+     * 图书封面
+     */
+    private String bookCover;
+
     private static final long serialVersionUID = 1L;
 }

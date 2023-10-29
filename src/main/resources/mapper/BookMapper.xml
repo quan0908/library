@@ -10,6 +10,9 @@
             <result property="bookNumber" column="bookNumber" jdbcType="INTEGER"/>
             <result property="type" column="type" jdbcType="VARCHAR"/>
             <result property="bookLocation" column="bookLocation" jdbcType="VARCHAR"/>
+            <result property="bookAuthor" column="bookAuthor" jdbcType="VARCHAR"/>
+            <result property="bookCover" column="bookCover" jdbcType="VARCHAR"/>
+            <result property="bookTra" column="bookTra" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
@@ -17,7 +20,8 @@
 
     <sql id="Base_Column_List">
         id,bookName,bookNumber,
-        type,bookLocation,createTime,
+        type,bookLocation,bookAuthor,
+        bookCover,bookTra,createTime,
         updateTime,isDelete
     </sql>
 </mapper>

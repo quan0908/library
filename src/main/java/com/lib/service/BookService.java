@@ -5,12 +5,9 @@ import com.lib.common.DeleteRequest;
 import com.lib.model.dto.book.BookAddRequest;
 import com.lib.model.dto.book.BookQueryRequest;
 import com.lib.model.dto.book.BookUpdateRequest;
-import com.lib.model.dto.user.UserQueryRequest;
-import com.lib.model.entity.Book;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lib.model.entity.User;
+import com.lib.model.entity.Book;
 import com.lib.model.vo.BookVO;
-import com.lib.model.vo.UserVO;
 
 import java.util.List;
 

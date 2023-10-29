@@ -26,5 +26,10 @@ public class BookQueryRequest extends PageRequest implements Serializable {
      */
     private String type;
 
+    /**
+     *图书作者
+     */
+    private String bookAuthor;
+
     private static final long serialVersionUID = 1L;
 }

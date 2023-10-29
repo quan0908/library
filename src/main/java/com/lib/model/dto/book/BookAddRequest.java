@@ -1,5 +1,6 @@
 package com.lib.model.dto.book;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class BookAddRequest implements Serializable {
     /**
-     * 图书名字
+     * 图书名
      */
     private String bookName;
 
@@ -20,7 +21,7 @@ public class BookAddRequest implements Serializable {
     private Integer bookNumber;
 
     /**
-     * 图书类型
+     * 图书分类
      */
     private String type;
 
@@ -28,5 +29,21 @@ public class BookAddRequest implements Serializable {
      * 图书位置
      */
     private String bookLocation;
+
+    /**
+     * 图书作者
+     */
+    private String bookAuthor;
+
+    /**
+     * 图书简介
+     */
+    private String bookTra;
+
+    /**
+     * 图书封面
+     */
+    private String bookCover;
+
     private static final long serialVersionUID = 1L;
 }

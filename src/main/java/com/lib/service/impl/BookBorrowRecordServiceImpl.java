@@ -22,8 +22,6 @@ import com.lib.mapper.BookBorrowRecordMapper;
 import com.lib.service.BookService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

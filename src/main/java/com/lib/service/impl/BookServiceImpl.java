@@ -11,9 +11,7 @@ import com.lib.model.dto.book.BookAddRequest;
 import com.lib.model.dto.book.BookQueryRequest;
 import com.lib.model.dto.book.BookUpdateRequest;
 import com.lib.model.entity.Book;
-import com.lib.model.entity.User;
 import com.lib.model.vo.BookVO;
-import com.lib.model.vo.UserVO;
 import com.lib.service.BookService;
 import com.lib.mapper.BookMapper;
 import com.lib.utils.SqlUtils;
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     implements BookService{
     /**
-     * 获取图书查询条件
+     * 获取图书查询条件(图书名，图书类型，图书作者)
      * @param bookQueryRequest 图书查询请求
      * @return
      */
@@ -44,12 +42,15 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
 
         String bookName = bookQueryRequest.getBookName();
         String type = bookQueryRequest.getType();
+        String bookAuthor = bookQueryRequest.getBookAuthor();
         String sortField = bookQueryRequest.getSortField();
         String sortOrder = bookQueryRequest.getSortOrder();
+
 
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(bookName), "bookName", bookName);
         queryWrapper.like(StringUtils.isNotBlank(type), "type", type);
+        queryWrapper.eq(StringUtils.isNotBlank(bookAuthor),"bookAuthor",bookAuthor);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
@@ -89,14 +90,18 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         String bookLocation = bookAddRequest.getBookLocation();
         String type = bookAddRequest.getType();
         Integer bookNumber = bookAddRequest.getBookNumber();
+        String bookAuthor = bookAddRequest.getBookAuthor();
+        String bookTra = bookAddRequest.getBookTra();
+        String bookCover = bookAddRequest.getBookCover();
 
-        if(StringUtils.isAnyBlank(bookName,bookLocation,type)){
+        if(StringUtils.isAnyBlank(bookName,bookLocation,type,bookAuthor,bookTra,bookCover)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //书本数量小于0
         if(bookNumber < 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+
         //转成book并加入数据库
         Book book = new Book();
         BeanUtils.copyProperties(bookAddRequest,book);
@@ -119,8 +124,11 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         String bookLocation = bookUpdateRequest.getBookLocation();
         String type = bookUpdateRequest.getType();
         Integer bookNumber = bookUpdateRequest.getBookNumber();
+        String bookAuthor = bookUpdateRequest.getBookAuthor();
+        String bookTra = bookUpdateRequest.getBookTra();
+        String bookCover = bookUpdateRequest.getBookCover();
 
-        if(StringUtils.isAnyBlank(bookName,bookLocation,type)){
+        if(StringUtils.isAnyBlank(bookName,bookLocation,type,bookAuthor,bookTra,bookCover)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //书本数量小于0
@@ -154,8 +162,6 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         Long bookId = deleteRequest.getId();
         return this.removeById(bookId);
     }
-
-
 }
 
 
