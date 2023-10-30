@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 /**
  * 图书查询请求
- *
  * @author quan
  */
 @EqualsAndHashCode(callSuper = true)

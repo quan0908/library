@@ -123,7 +123,7 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
      * @return
      */
     @Override
-    public boolean addBookBorrowRecord(BookBorrowRecordAddRequest bookBorrowRecordAddRequest) {
+    public boolean addBookBorrowRecord(BookBorrowRecordAddRequest bookBorrowRecordAddRequest, HttpServletRequest request) {
         //参数校验
         if(bookBorrowRecordAddRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -132,7 +132,6 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
         Long bookId = bookBorrowRecordAddRequest.getBookId();
         Integer borrowDays = bookBorrowRecordAddRequest.getBorrowDays();
         //获取当前id
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User user = userService.getLoginUser(request);
 
         //判断这本书在数据库中是否存在

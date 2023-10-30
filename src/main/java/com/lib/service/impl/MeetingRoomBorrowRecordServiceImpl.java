@@ -23,9 +23,6 @@ import com.lib.service.MeetingRoomService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -123,7 +120,8 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
      * @return
      */
     @Override
-    public boolean addMeetingRoomBorrowRecord(MeetingRoomBorrowRecordAddRequest meetingRoomBorrowRecordAddRequest) {
+    public boolean addMeetingRoomBorrowRecord(MeetingRoomBorrowRecordAddRequest meetingRoomBorrowRecordAddRequest,
+                                              HttpServletRequest request) {
         //参数校验
         if(meetingRoomBorrowRecordAddRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -132,7 +130,6 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         Long meetingRoomId = meetingRoomBorrowRecordAddRequest.getMeetingRoomId();
         Date borrowTime = meetingRoomBorrowRecordAddRequest.getBorrowTime();
         //获取当前id
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User user = userService.getLoginUser(request);
 
         //判断这本会议室在数据库中是否存在

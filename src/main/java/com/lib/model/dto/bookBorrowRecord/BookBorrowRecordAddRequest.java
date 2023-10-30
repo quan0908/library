@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 图书记录添加请求
+ *  @author quan
  */
 @Data
 public class BookBorrowRecordAddRequest implements Serializable {

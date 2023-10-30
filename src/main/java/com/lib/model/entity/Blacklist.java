@@ -24,7 +24,7 @@ public class Blacklist implements Serializable {
     /**
      * 黑名单用户id
      */
-    private String blackUserId;
+    private Long blackUserId;
 
     /**
      * 创建时间

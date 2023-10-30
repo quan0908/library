@@ -10,6 +10,7 @@ import com.lib.model.entity.MeetingRoomBorrowRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.model.vo.MeetingRoomBorrowRecordVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public interface MeetingRoomBorrowRecordService extends IService<MeetingRoomBorr
      * @param meetingRoomAddRequest 借会议室记录请求
      * @return 是否添加成功
      */
-    boolean addMeetingRoomBorrowRecord(MeetingRoomBorrowRecordAddRequest meetingRoomAddRequest);
+    boolean addMeetingRoomBorrowRecord(MeetingRoomBorrowRecordAddRequest meetingRoomAddRequest, HttpServletRequest request);
 
     /**
      * 修改会议室

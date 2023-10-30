@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
  *
  */
 public enum UserRoleEnum {
-
     USER("用户", "user"),
     SUPER_ADMIN("管理员", "superAdmin"),
     MEETING_ROOM_ADMIN("会议室管理员","meetingRoomAdmin"),

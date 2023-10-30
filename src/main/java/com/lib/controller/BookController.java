@@ -51,8 +51,7 @@ public class BookController {
     }
 
     /**
-     * 分页获取用户封装列表
-     *
+     * 分页获取图书封装列表
      * @param bookQueryRequest
      * @param request
      * @return

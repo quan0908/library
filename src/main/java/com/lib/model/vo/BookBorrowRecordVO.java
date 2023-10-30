@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 借书记录VO
  * @author quan
  */
 @Data

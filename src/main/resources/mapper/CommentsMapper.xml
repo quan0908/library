@@ -7,9 +7,9 @@
     <resultMap id="BaseResultMap" type="com.lib.model.entity.Comments">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="userId" column="userId" jdbcType="VARCHAR"/>
-            <result property="bookId" column="bookId" jdbcType="VARCHAR"/>
-            <result property="checkUserId" column="checkUserId" jdbcType="VARCHAR"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
+            <result property="checkUserId" column="checkUserId" jdbcType="BIGINT"/>
             <result property="isChecked" column="isChecked" jdbcType="TINYINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>

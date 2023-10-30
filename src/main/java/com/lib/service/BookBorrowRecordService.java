@@ -9,6 +9,7 @@ import com.lib.model.entity.BookBorrowRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.model.vo.BookBorrowRecordVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public interface BookBorrowRecordService extends IService<BookBorrowRecord> {
      * @param bookAddRequest 借书记录请求
      * @return 是否添加成功
      */
-    boolean addBookBorrowRecord(BookBorrowRecordAddRequest bookAddRequest);
+    boolean addBookBorrowRecord(BookBorrowRecordAddRequest bookAddRequest, HttpServletRequest request);
 
     /**
      * 修改图书

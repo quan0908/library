@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 会议室添加请求
+ *  @author quan
  */
 @Data
 public class MeetingRoomAddRequest implements Serializable {

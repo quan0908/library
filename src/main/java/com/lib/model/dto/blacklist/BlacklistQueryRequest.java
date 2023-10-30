@@ -1,4 +1,7 @@
-package com.lib.model.dto.meetingRoom;
+package com.lib.model.dto.blacklist;
+
+
+
 import com.lib.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,16 +9,16 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * 会议室查询请求
+ * 黑名单查询请求
  * @author quan
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MeetingRoomQueryRequest extends PageRequest implements Serializable {
+public class BlacklistQueryRequest extends PageRequest implements Serializable {
     /**
-     * 会议室名字
+     * 用户id
      */
-    private String meetingRoomName;
+    private Long userId;
 
     private static final long serialVersionUID = 1L;
 }

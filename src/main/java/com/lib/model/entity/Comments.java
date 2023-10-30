@@ -29,17 +29,17 @@ public class Comments implements Serializable {
     /**
      * 评论用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 评论图书id
      */
-    private String bookId;
+    private Long bookId;
 
     /**
      * 审核人id
      */
-    private String checkUserId;
+    private Long checkUserId;
 
     /**
      * 0-待审核 1-审核通过 2-审核未通过

@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.lib.model.entity.Blacklist">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="blackUserId" column="blackUserId" jdbcType="VARCHAR"/>
+            <result property="blackUserId" column="blackUserId" jdbcType="BIGINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>

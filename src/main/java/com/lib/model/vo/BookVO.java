@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import java.io.Serializable;
 
 /**
+ * 图书VO
  * @author quan
  */
 @Data
@@ -43,10 +44,16 @@ public class BookVO implements Serializable {
      */
     private String bookAuthor;
 
+
     /**
      * 图书简介
      */
     private String bookTra;
+
+    /**
+     * 图书封面
+     */
+    private String bookCover;
 
     private static final long serialVersionUID = 1L;
 

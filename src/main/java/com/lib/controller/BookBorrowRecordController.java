@@ -29,7 +29,7 @@ import java.util.List;
  * @author quan
  */
 @RestController
-@RequestMapping("/borrowRecord")
+@RequestMapping("/borrowRecord/book")
 public class BookBorrowRecordController {
     @Resource
     private BookBorrowRecordService bookBorrowRecordService;
@@ -78,8 +78,9 @@ public class BookBorrowRecordController {
      * @return
      */
     @PostMapping("/add")
-    public BaseResponse<Void> addBookBorrowRecord(@RequestBody BookBorrowRecordAddRequest bookBorrowRecordAddRequest){
-        if(bookBorrowRecordService.addBookBorrowRecord(bookBorrowRecordAddRequest)){
+    public BaseResponse<Void> addBookBorrowRecord(@RequestBody BookBorrowRecordAddRequest bookBorrowRecordAddRequest,
+                                                  HttpServletRequest request){
+        if(bookBorrowRecordService.addBookBorrowRecord(bookBorrowRecordAddRequest,request)){
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
