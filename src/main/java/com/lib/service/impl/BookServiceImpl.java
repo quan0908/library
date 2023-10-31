@@ -48,8 +48,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
 
 
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(bookName), "bookName", bookName);
-        queryWrapper.like(StringUtils.isNotBlank(type), "type", type);
+        queryWrapper.like(StringUtils.isNotBlank(bookName), "bookName", bookName);
+        queryWrapper.eq(StringUtils.isNotBlank(type), "type", type);
         queryWrapper.eq(StringUtils.isNotBlank(bookAuthor),"bookAuthor",bookAuthor);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
@@ -119,32 +119,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        Long bookId = bookUpdateRequest.getBookId();
-        String bookName = bookUpdateRequest.getBookName();
-        String bookLocation = bookUpdateRequest.getBookLocation();
-        String type = bookUpdateRequest.getType();
         Integer bookNumber = bookUpdateRequest.getBookNumber();
-        String bookAuthor = bookUpdateRequest.getBookAuthor();
-        String bookTra = bookUpdateRequest.getBookTra();
-        String bookCover = bookUpdateRequest.getBookCover();
-
-        if(StringUtils.isAnyBlank(bookName,bookLocation,type,bookAuthor,bookTra,bookCover)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
         //书本数量小于0
         if(bookNumber < 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-
-        //查询出原来的数据
-        QueryWrapper<Book> bookQueryWrapper = new QueryWrapper<>();
-        bookQueryWrapper.eq("id", bookId);
-        Book book = this.getOne(bookQueryWrapper);
-        if(book == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        //新数据覆盖旧数据
+        Book book = new Book();
         BeanUtils.copyProperties(bookUpdateRequest,book);
+
         return this.updateById(book);
     }
 

@@ -92,7 +92,7 @@ public class BookBorrowRecordController {
      * @return
      */
     @PostMapping("/update")
-    public BaseResponse<Void> updateBook(@RequestBody BookBorrowRecordUpdateRequest bookBorrowRecordUpdateRequest){
+    public BaseResponse<Void> updateBorrowRecord(@RequestBody BookBorrowRecordUpdateRequest bookBorrowRecordUpdateRequest){
         if(bookBorrowRecordService.updateBookBorrowRecord(bookBorrowRecordUpdateRequest)){
             return ResultUtils.success(null);
         }
@@ -106,7 +106,7 @@ public class BookBorrowRecordController {
      */
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
-    public BaseResponse<Void> deleteBook(@RequestBody DeleteRequest deleteRequest){
+    public BaseResponse<Void> deleteBorrowRecord(@RequestBody DeleteRequest deleteRequest){
         if(bookBorrowRecordService.deleteBookBorrowRecord(deleteRequest)){
             return ResultUtils.success(null);
         }

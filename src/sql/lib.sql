@@ -97,7 +97,7 @@ CREATE TABLE if not exists user
     username   varchar(128) NOT NULL COMMENT '姓名',
     idCard     char(18)     NOT NULL COMMENT '身份证号',
     password   varchar(256) NOT NULL COMMENT '密码',
-    userAvatar varchar(256) COMMENT '用户头像',
+    userAvatar longtext COMMENT '用户头像',
     foulTimes  int          NOT NULL DEFAULT '0' COMMENT '违规次数',
     role       varchar(64)  NOT NULL DEFAULT '0' COMMENT 'BAN USER LIB_ADMIN MEETING_ROOM_ADMIN SUPPER_ADMIN',
     createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',

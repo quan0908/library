@@ -16,7 +16,6 @@ public class BookVO implements Serializable {
     /**
      * 图书id
      */
-    @TableId
     private Long id;
 
     /**

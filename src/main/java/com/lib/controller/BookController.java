@@ -81,7 +81,7 @@ public class BookController {
      */
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
-    public BaseResponse<Void> addBook(@RequestBody BookAddRequest bookAddRequest){
+    public BaseResponse<Boolean> addBook(@RequestBody BookAddRequest bookAddRequest){
         if(bookService.addBook(bookAddRequest)){
             return ResultUtils.success(null);
         }

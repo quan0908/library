@@ -291,13 +291,4 @@ public class UserController {
         return ResultUtils.success(true);
     }
 
-    /**
-     * 方便起见，转base64后直接存储到数据库
-     * @return
-     */
-    @PostMapping("/upload/userAvatar")
-    public BaseResponse<String> updateUserAvatar(@RequestPart("file") MultipartFile multipartFile){
-
-        return ResultUtils.success("");
-    }
 }

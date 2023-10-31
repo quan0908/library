@@ -13,7 +13,7 @@ public class BookUpdateRequest implements Serializable {
     /**
      * 图书id
      */
-    private Long bookId;
+    private Long id;
 
     /**
      * 图书名
