@@ -85,7 +85,6 @@ public class CommentController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Void> addComments(@RequestBody CommentsAddRequest commentsAddRequest,HttpServletRequest request){
         if(commentsService.addComments(commentsAddRequest,request)){
             return ResultUtils.success(null);

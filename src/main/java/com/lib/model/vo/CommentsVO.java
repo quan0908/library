@@ -36,9 +36,9 @@ public class CommentsVO implements Serializable {
     private BookVO bookVO;
 
     /**
-     * 审核人id
+     * 审核人VO
      */
-    private String checkUserId;
+    private UserVO checkUserVO;
 
     /**
      * 0-待审核 1-审核通过 2-审核未通过

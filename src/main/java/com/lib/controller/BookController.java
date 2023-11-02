@@ -115,4 +115,17 @@ public class BookController {
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
     }
+    @GetMapping("/get")
+    public BaseResponse<BookVO> getBookById(Long id){
+        if(id == null || id <= 0 ){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Book book = bookService.getById(id);
+        if(book == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        BookVO bookVO = bookService.getBookVO(book);
+
+        return ResultUtils.success(bookVO);
+    }
 }

@@ -32,6 +32,11 @@ public class UserVO implements Serializable {
 
 
     /**
+     * 用户头像
+     */
+    private String userAvatar;
+
+    /**
      * 违规次数
      */
     private Integer foulTimes;

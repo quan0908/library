@@ -24,6 +24,7 @@ CREATE TABLE if not exists book
     bookAuthor   varchar(128)                       NOT NULL COMMENT '图书作者',
     bookCover    longtext                           NOT NULL COMMENT '图书封面',
     bookTra      text                               NOT NULL COMMENT '图书简介',
+    publishTime  datetime                           comment '发布时间',
     createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete     tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删',
@@ -53,7 +54,7 @@ CREATE TABLE if not exists comments
     content     text         NOT NULL COMMENT '评论内容',
     userId      bigint       NOT NULL COMMENT '评论用户id',
     bookId      bigint       NOT NULL COMMENT '评论图书id',
-    checkUserId varchar(128) NOT NULL COMMENT '审核人id',
+    checkUserId varchar(128)  COMMENT '审核人id',
     isChecked   tinyint      DEFAULT '0' COMMENT '0-待审核 1-审核通过 2-审核未通过',
     createTime  datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime  datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
@@ -69,7 +70,7 @@ CREATE TABLE if not exists meeting_room
     name       varchar(128)                       NOT NULL COMMENT '会议室编号',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删',
+    isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1-删',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
