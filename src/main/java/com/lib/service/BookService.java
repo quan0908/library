@@ -2,13 +2,12 @@ package com.lib.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lib.common.DeleteRequest;
-import com.lib.model.dto.book.BookAddRequest;
-import com.lib.model.dto.book.BookQueryRequest;
-import com.lib.model.dto.book.BookUpdateRequest;
+import com.lib.model.dto.book.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.model.entity.Book;
 import com.lib.model.vo.BookVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

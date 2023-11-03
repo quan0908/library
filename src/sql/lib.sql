@@ -19,6 +19,7 @@ CREATE TABLE if not exists book
     id           bigint                             NOT NULL COMMENT '图书id',
     bookName     varchar(128)                       NOT NULL COMMENT '图书名',
     bookNumber   int                                NOT NULL COMMENT '图书数量',
+    bookRemaining int                               NOT NULL COMMENT '图书可借数量',
     type         varchar(128)                       NOT NULL COMMENT '图书分类',
     bookLocation varchar(128)                       NOT NULL COMMENT '图书位置',
     bookAuthor   varchar(128)                       NOT NULL COMMENT '图书作者',
@@ -68,6 +69,7 @@ CREATE TABLE if not exists meeting_room
 (
     id         bigint                             NOT NULL COMMENT '会议室id',
     name       varchar(128)                       NOT NULL COMMENT '会议室编号',
+    capacity   int                                NOT NULL COMMENT '会议室容纳人数',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1-删',

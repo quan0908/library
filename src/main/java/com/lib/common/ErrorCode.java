@@ -15,6 +15,9 @@ public enum ErrorCode {
     FORBIDDEN_ERROR(40300, "禁止访问"),
     SYSTEM_ERROR(50000, "系统内部异常"),
     OPERATION_ERROR(50001, "操作失败"),
+    BOOK_BORROW_TOTAL_ERROR(50020,"图书数量不够，借书失败"),
+    BOOK_BORROW_ERROR(50020,"相同的图书未归还，借书失败"),
+
 
     API_REQUEST_ERROR(50010, "接口调用失败");
 

@@ -9,11 +9,10 @@ import com.lib.common.ResultUtils;
 import com.lib.constant.UserConstant;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
-import com.lib.model.dto.book.BookAddRequest;
-import com.lib.model.dto.book.BookQueryRequest;
-import com.lib.model.dto.book.BookUpdateRequest;
+import com.lib.model.dto.book.*;
 import com.lib.model.entity.Book;
 import com.lib.model.vo.BookVO;
+import com.lib.service.BookBorrowRecordService;
 import com.lib.service.BookService;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -29,6 +28,9 @@ import java.util.List;
 public class BookController {
     @Resource
     private BookService bookService;
+
+    @Resource
+    private BookBorrowRecordService bookBorrowRecordService;
 
     /**
      * 分页获取图书列表
@@ -115,6 +117,7 @@ public class BookController {
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
     }
+
     @GetMapping("/get")
     public BaseResponse<BookVO> getBookById(Long id){
         if(id == null || id <= 0 ){
@@ -128,4 +131,30 @@ public class BookController {
 
         return ResultUtils.success(bookVO);
     }
+
+    /**
+     * 借书
+     */
+    @PostMapping("/borrow")
+    public BaseResponse<Void> borrowBook(@RequestBody BookBorrowRequest bookBorrowRequest,
+                                         HttpServletRequest request){
+        if(bookBorrowRecordService.borrowBook(bookBorrowRequest,request)){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.OPERATION_ERROR,"借书失败");
+    }
+
+    /**
+     * 还书
+     */
+    @PostMapping("/return")
+    public BaseResponse<Void> returnBook(@RequestBody BookReturnRequest bookReturnRequest,
+                                         HttpServletRequest request){
+        if(bookBorrowRecordService.returnBook(bookReturnRequest)){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.OPERATION_ERROR,"还书失败");
+    }
+
+
 }

@@ -87,13 +87,18 @@ public class MeetingRoomServiceImpl extends ServiceImpl<MeetingRoomMapper, Meeti
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        String meetingRoomName = meetingRoomAddRequest.getMeetingRoomName();
+        String meetingRoomName = meetingRoomAddRequest.getName();
+        Integer capacity = meetingRoomAddRequest.getCapacity();
         if(StringUtils.isAnyBlank(meetingRoomName)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if(capacity <= 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         MeetingRoom meetingRoom = new MeetingRoom();
         meetingRoom.setName(meetingRoomName);
+        meetingRoom.setCapacity(capacity);
         return this.save(meetingRoom);
     }
 
@@ -108,20 +113,24 @@ public class MeetingRoomServiceImpl extends ServiceImpl<MeetingRoomMapper, Meeti
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        Long meetingRoomId = meetingRoomUpdateRequest.getMeetingRoomId();
-        String meetingRoomName = meetingRoomUpdateRequest.getMeetingRoomName();
+        Long id = meetingRoomUpdateRequest.getId();
+        String meetingRoomName = meetingRoomUpdateRequest.getName();
+        Integer capacity = meetingRoomUpdateRequest.getCapacity();
 
         if(StringUtils.isAnyBlank(meetingRoomName)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if(capacity != null && capacity <= 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
 
-        if(meetingRoomId == null){
+        if(id == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         //查询出原来的数据
         QueryWrapper<MeetingRoom> meetingRoomQueryWrapper = new QueryWrapper<>();
-        meetingRoomQueryWrapper.eq("id", meetingRoomId);
+        meetingRoomQueryWrapper.eq("id", id);
         MeetingRoom meetingRoom = this.getOne(meetingRoomQueryWrapper);
         if(meetingRoom == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

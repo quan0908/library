@@ -27,6 +27,11 @@ public class MeetingRoom implements Serializable {
     private String name;
 
     /**
+     * 会议室容量
+     */
+    private Integer capacity;
+
+    /**
      * 创建时间
      */
     private Date createTime;

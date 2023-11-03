@@ -11,9 +11,14 @@ import java.io.Serializable;
 @Data
 public class MeetingRoomAddRequest implements Serializable {
     /**
-     * 会议室名字
+     * 会议室编号
      */
-    private String meetingRoomName;
+    private String name;
+
+    /**
+     * 会议室容量
+     */
+    private Integer capacity;
 
     private static final long serialVersionUID = 1L;
 }

@@ -8,6 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="bookName" column="bookName" jdbcType="VARCHAR"/>
             <result property="bookNumber" column="bookNumber" jdbcType="INTEGER"/>
+            <result property="bookRemaining" column="bookRemaining" jdbcType="INTEGER"/>
             <result property="type" column="type" jdbcType="VARCHAR"/>
             <result property="bookLocation" column="bookLocation" jdbcType="VARCHAR"/>
             <result property="bookAuthor" column="bookAuthor" jdbcType="VARCHAR"/>
@@ -19,7 +20,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,bookName,bookNumber,
+        id,bookName,bookNumber,bookRemaining,
         type,bookLocation,bookAuthor,
         bookCover,bookTra,createTime,
         updateTime,isDelete

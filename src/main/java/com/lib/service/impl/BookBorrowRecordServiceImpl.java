@@ -8,6 +8,8 @@ import com.lib.common.ErrorCode;
 import com.lib.constant.BookConstant;
 import com.lib.constant.CommonConstant;
 import com.lib.exception.BusinessException;
+import com.lib.model.dto.book.BookBorrowRequest;
+import com.lib.model.dto.book.BookReturnRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordAddRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordQueryRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordUpdateRequest;
@@ -186,6 +188,97 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
         Long bookId = deleteRequest.getId();
         return this.removeById(bookId);
     }
+
+    /**
+     * 借书
+     * @param bookBorrowRequest 借书请求参数
+     * @return
+     */
+    @Override
+    public boolean borrowBook(BookBorrowRequest bookBorrowRequest, HttpServletRequest request) {
+        //参数校验
+        if(bookBorrowRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Long bookId = bookBorrowRequest.getBookId();
+        Integer borrowDays = bookBorrowRequest.getBorrowDays();
+        if(bookId == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if(borrowDays == null || borrowDays <= 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        //判断用户以前借这本书是否归还，未归还则不允许用户借
+        User user = userService.getLoginUser(request);
+        Long userId = user.getId();
+        QueryWrapper<BookBorrowRecord> bookBorrowRecordQueryWrapper = new QueryWrapper<>();
+        bookBorrowRecordQueryWrapper.eq("bookId",bookId);
+        bookBorrowRecordQueryWrapper.eq("userId",userId);
+        bookBorrowRecordQueryWrapper.eq("isReturned",BookConstant.NOT_RETURN);
+        BookBorrowRecord bookBorrowRecord = this.getOne(bookBorrowRecordQueryWrapper);
+        if(bookBorrowRecord != null){
+            throw new BusinessException(ErrorCode.BOOK_BORROW_ERROR);
+        }
+
+        //判断书的数量是否足够
+        Book book = bookService.getById(bookId);
+        if(book == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Integer bookRemaining = book.getBookRemaining();
+        //不够的话，不允许借用
+        if(bookRemaining <= 0){
+            throw new BusinessException(ErrorCode.BOOK_BORROW_TOTAL_ERROR);
+        }
+        //图书数量足够允许调用
+        book.setBookRemaining(bookRemaining - 1);
+        if(!bookService.updateById(book)){
+            return false;
+        }
+        //写入借书记录表中
+        BookBorrowRecordAddRequest bookBorrowRecordAddRequest = new BookBorrowRecordAddRequest();
+        bookBorrowRecordAddRequest.setBookId(bookId);
+        bookBorrowRecordAddRequest.setBorrowDays(borrowDays);
+        return this.addBookBorrowRecord(bookBorrowRecordAddRequest,request);
+    }
+
+    /**
+     * 还书
+     * @param bookReturnRequest 还书请求
+     * @return
+     */
+    @Override
+    public boolean returnBook(BookReturnRequest bookReturnRequest) {
+        //参数校验
+        if(bookReturnRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Long borrowBookRecordId = bookReturnRequest.getBorrowBookRecordId();
+        if(borrowBookRecordId == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //修改用户借书记录状态
+        BookBorrowRecord bookBorrowRecord = this.getById(borrowBookRecordId);
+        if(bookBorrowRecord == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        bookBorrowRecord.setIsReturned(BookConstant.RETURN);
+        this.updateById(bookBorrowRecord);
+
+        //修改图书表中可借书的数量
+        Long bookId = bookBorrowRecord.getBookId();
+        Book book = bookService.getById(bookId);
+        if(book == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        book.setBookRemaining(book.getBookRemaining() + 1);
+        return bookService.updateById(book);
+    }
+
 }
 
 

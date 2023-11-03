@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
+import com.lib.constant.BookConstant;
 import com.lib.constant.CommonConstant;
 import com.lib.exception.BusinessException;
-import com.lib.model.dto.book.BookAddRequest;
-import com.lib.model.dto.book.BookQueryRequest;
-import com.lib.model.dto.book.BookUpdateRequest;
+import com.lib.model.dto.book.*;
+import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordAddRequest;
 import com.lib.model.entity.Book;
+import com.lib.model.entity.BookBorrowRecord;
 import com.lib.model.vo.BookVO;
+import com.lib.service.BookBorrowRecordService;
 import com.lib.service.BookService;
 import com.lib.mapper.BookMapper;
 import com.lib.utils.SqlUtils;
@@ -19,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,6 +94,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         String bookLocation = bookAddRequest.getBookLocation();
         String type = bookAddRequest.getType();
         Integer bookNumber = bookAddRequest.getBookNumber();
+        Integer bookRemaining = bookAddRequest.getBookRemaining();
         String bookAuthor = bookAddRequest.getBookAuthor();
         String bookTra = bookAddRequest.getBookTra();
         String bookCover = bookAddRequest.getBookCover();
@@ -98,7 +103,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //书本数量小于0
-        if(bookNumber < 0){
+        if(bookNumber < 0 && bookRemaining < 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
@@ -120,8 +125,10 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         }
 
         Integer bookNumber = bookUpdateRequest.getBookNumber();
+        Integer bookRemaining = bookUpdateRequest.getBookRemaining();
+
         //书本数量小于0
-        if(bookNumber < 0){
+        if(bookNumber < 0 && bookRemaining < 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Book book = new Book();

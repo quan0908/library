@@ -2,6 +2,8 @@ package com.lib.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lib.common.DeleteRequest;
+import com.lib.model.dto.book.BookBorrowRequest;
+import com.lib.model.dto.book.BookReturnRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordAddRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordQueryRequest;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordUpdateRequest;
@@ -60,4 +62,19 @@ public interface BookBorrowRecordService extends IService<BookBorrowRecord> {
      * @return
      */
     boolean deleteBookBorrowRecord(DeleteRequest deleteRequest);
+
+    /**
+     * 借书
+     * @param bookBorrowRequest 借书请求
+     * @param request 请求
+     * @return
+     */
+    boolean borrowBook(BookBorrowRequest bookBorrowRequest, HttpServletRequest request);
+
+    /**
+     * 还书
+     * @param bookReturnRequest 还书请求
+     * @return
+     */
+    boolean returnBook(BookReturnRequest bookReturnRequest);
 }

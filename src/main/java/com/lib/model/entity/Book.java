@@ -30,6 +30,11 @@ public class Book implements Serializable {
     private Integer bookNumber;
 
     /**
+     * 图书可借数量
+     */
+    private Integer bookRemaining;
+
+    /**
      * 图书分类
      */
     private String type;

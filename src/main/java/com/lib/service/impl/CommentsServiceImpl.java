@@ -108,6 +108,14 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
         }
         UserVO userVO = UserVO.objToVo(user);
 
+        //获取checkUsrVO
+        Long checkUserId = comments.getCheckUserId();
+        User checkUser = userService.getById(checkUserId);
+        if(checkUser == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        UserVO checkUserVO = UserVO.objToVo(checkUser);
+
         //获取bookVO
         Long bookId = comments.getBookId();
         Book book = bookService.getById(bookId);
@@ -118,6 +126,7 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
         
         commentsVO.setUserVO(userVO);
         commentsVO.setBookVO(bookVO);
+        commentsVO.setCheckUserVO(checkUserVO);
         return commentsVO;
     }
 
