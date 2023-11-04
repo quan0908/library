@@ -111,3 +111,12 @@ CREATE TABLE if not exists user
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+CREATE TABLE if not exists announcement(
+    id          bigint      PRIMARY KEY   COMMENT '公告id',
+    content     text        NOT NULL      COMMENT '公告内容',
+    creatorId   bigint      NOT NULL      COMMENT '公告发布人',
+    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+);
+

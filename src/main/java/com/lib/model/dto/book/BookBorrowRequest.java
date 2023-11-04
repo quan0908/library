@@ -15,6 +15,16 @@ public class BookBorrowRequest implements Serializable {
     private Long bookId;
 
     /**
+     * 用户姓名
+     */
+    private String username;
+
+    /**
+     * 身份证号
+     */
+    private String idCard;
+
+    /**
      * 借书天数
      */
     private Integer borrowDays;

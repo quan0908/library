@@ -24,6 +24,7 @@ import com.lib.mapper.BookBorrowRecordMapper;
 import com.lib.service.BookService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -202,6 +203,8 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
         }
 
         Long bookId = bookBorrowRequest.getBookId();
+        String idCard = bookBorrowRequest.getIdCard();
+        String username = bookBorrowRequest.getUsername();
         Integer borrowDays = bookBorrowRequest.getBorrowDays();
         if(bookId == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -209,9 +212,20 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
         if(borrowDays == null || borrowDays <= 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if(StringUtils.isAnyBlank(idCard,username)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        //对用户进行校验
+        User user = userService.getLoginUser(request);
+        if(!user.getIdCard().equals(idCard)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if(!user.getUsername().equals(username)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
 
         //判断用户以前借这本书是否归还，未归还则不允许用户借
-        User user = userService.getLoginUser(request);
         Long userId = user.getId();
         QueryWrapper<BookBorrowRecord> bookBorrowRecordQueryWrapper = new QueryWrapper<>();
         bookBorrowRecordQueryWrapper.eq("bookId",bookId);
