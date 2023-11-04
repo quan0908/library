@@ -29,7 +29,12 @@ public class BookBorrowRecordVO implements Serializable {
     /**
      * 开始时间
      */
-    private Date startTime;
+    private Date createTime;
+
+    /**
+     * 0-未归还 1-已归还
+     */
+    private Integer isReturned;
 
     /**
      * 借书天数
