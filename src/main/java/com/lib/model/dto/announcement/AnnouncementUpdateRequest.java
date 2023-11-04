@@ -11,6 +11,11 @@ import java.io.Serializable;
 @Data
 public class AnnouncementUpdateRequest implements Serializable {
     /**
+     * 公告名
+     */
+    private String name;
+
+    /**
      * 公共id
      */
     private Long id;

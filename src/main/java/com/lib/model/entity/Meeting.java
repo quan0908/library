@@ -11,31 +11,41 @@ import java.util.Date;
 
 /**
  * 
- * @TableName announcement
+ * @TableName meeting
  */
-@TableName(value ="announcement")
+@TableName(value ="meeting")
 @Data
-public class Announcement implements Serializable {
+public class Meeting implements Serializable {
     /**
-     * 公告id
+     * 会议id
      */
     @TableId
     private Long id;
 
     /**
-     * 公告名
+     * 会议名字
      */
     private String name;
 
     /**
-     * 公告内容
-     */
-    private String content;
-
-    /**
-     * 公告发布人
+     * 会议发起人
      */
     private Long creatorId;
+
+    /**
+     * 会议开始时间
+     */
+    private Date startTime;
+
+    /**
+     * 会议结束时间
+     */
+    private Date endTime;
+
+    /**
+     * 会议室ID
+     */
+    private Long meetingRoomId;
 
     /**
      * 创建时间

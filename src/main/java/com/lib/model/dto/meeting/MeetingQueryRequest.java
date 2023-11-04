@@ -1,23 +1,35 @@
-package com.lib.model.dto.meetingRoom;
+package com.lib.model.dto.meeting;
 import com.lib.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
+
 /**
  * 会议查询请求
  * @author quan
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MeetingRoomQueryRequest extends PageRequest implements Serializable {
+public class MeetingQueryRequest extends PageRequest implements Serializable {
     /**
-     * 会议室名字
+     * 会议id
+     */
+    private Long id;
+
+    /**
+     * 会议名字
      */
     private String name;
 
     /**
-     * 会议室是否空
+     * 会议发起人账号
      */
-    private Integer isEmpty;
+    private String account;
+
+    /**
+     * 会议室ID
+     */
+    private Long meetingRoomId;
     private static final long serialVersionUID = 1L;
 }

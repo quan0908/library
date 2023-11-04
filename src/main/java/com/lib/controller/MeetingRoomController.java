@@ -42,7 +42,7 @@ public class MeetingRoomController {
      * @return
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
     public BaseResponse<Page<MeetingRoom>> listMeetingRoomByPage(@RequestBody MeetingRoomQueryRequest meetingRoomQueryRequest,
                                                    HttpServletRequest request) {
         long current = meetingRoomQueryRequest.getCurrent();
@@ -85,7 +85,7 @@ public class MeetingRoomController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
     public BaseResponse<Void> addMeetingRoom(@RequestBody MeetingRoomAddRequest meetingRoomAddRequest){
         if(meetingRoomService.addMeetingRoom(meetingRoomAddRequest)){
             return ResultUtils.success(null);
@@ -99,7 +99,7 @@ public class MeetingRoomController {
      * @return
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
     public BaseResponse<Void> updateMeetingRoom(@RequestBody MeetingRoomUpdateRequest meetingRoomUpdateRequest){
         if(meetingRoomService.updateMeetingRoom(meetingRoomUpdateRequest)){
             return ResultUtils.success(null);
@@ -113,7 +113,7 @@ public class MeetingRoomController {
      * @return
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
     public BaseResponse<Void> deleteMeetingRoom(@RequestBody DeleteRequest deleteRequest){
         if(meetingRoomService.deleteMeetingRoom(deleteRequest)){
             return ResultUtils.success(null);

@@ -32,6 +32,11 @@ public class MeetingRoom implements Serializable {
     private Integer capacity;
 
     /**
+     * 会议室是否空
+     */
+    private Integer isEmpty;
+
+    /**
      * 创建时间
      */
     private Date createTime;

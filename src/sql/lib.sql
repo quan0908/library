@@ -70,6 +70,7 @@ CREATE TABLE if not exists meeting_room
     id         bigint                             NOT NULL COMMENT '会议室id',
     name       varchar(128)                       NOT NULL COMMENT '会议室编号',
     capacity   int                                NOT NULL COMMENT '会议室容纳人数',
+    isEmpty    int      default 0                 not null comment '会议室是否空 0-空 1-占用',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1-删',
@@ -113,10 +114,34 @@ CREATE TABLE if not exists user
 
 CREATE TABLE if not exists announcement(
     id          bigint      PRIMARY KEY   COMMENT '公告id',
+    name       varchar(256) not null      comment '公告名字',
     content     text        NOT NULL      COMMENT '公告内容',
     creatorId   bigint      NOT NULL      COMMENT '公告发布人',
     createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
 );
+
+CREATE TABLE if not exists meeting_record(
+    id           bigint     primary key comment '会议记录id',
+    meetingId   bigint     NOT NULL    comment '会议id',
+    participantId  bigint     NOT NULL    comment '参与人id',
+    status       int        NOT NULL    comment '0-未审核 1-同意 2-不同意',
+    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+);
+
+CREATE TABLE if not exists meeting(
+    id          bigint      primary key       comment '会议id',
+    creatorId     bigint      NOT NULL    comment '会议发起人id',
+    startTime   datetime    NOT NULL comment '会议开始时间',
+    endTime     datetime    NOT NULL comment '会议结束时间',
+    meetingRoomId bigint    not null comment '会议室ID',
+    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+);
+
+
 

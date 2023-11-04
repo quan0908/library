@@ -16,14 +16,19 @@ import java.io.Serializable;
 @Data
 public class AnnouncementQueryRequest extends PageRequest implements Serializable {
     /**
+     * 公告名
+     */
+    private String name;
+
+    /**
      * 公告内容
      */
     private String content;
 
     /**
-     * 公告发布人
+     * 公告发布人账号
      */
-    private Long creatorId;
+    private String account;
 
     private static final long serialVersionUID = 1L;
 }

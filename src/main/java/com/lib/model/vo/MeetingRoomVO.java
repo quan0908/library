@@ -21,6 +21,16 @@ public class MeetingRoomVO implements Serializable {
      */
     private String name;
 
+    /**
+     * 会议室容量
+     */
+    private Integer capacity;
+
+    /**
+     * 会议室是否空
+     */
+    private Integer isEmpty;
+
     private static final long serialVersionUID = 1L;
 
     /**

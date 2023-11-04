@@ -129,4 +129,17 @@ public class AnnouncementController {
 
         return ResultUtils.success(announcementVO);
     }
+
+    /**
+     * 获取最新公告
+     * @return
+     */
+    @GetMapping("/getNew")
+    public BaseResponse<AnnouncementVO> getNewAnnouncement(){
+        AnnouncementVO announcement = announcementService.getNewAnnouncement();
+        if(announcement == null){
+            return ResultUtils.error(ErrorCode.OPERATION_ERROR);
+        }
+        return ResultUtils.success(announcement);
+    }
 }

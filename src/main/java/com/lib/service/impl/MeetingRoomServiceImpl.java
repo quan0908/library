@@ -36,7 +36,7 @@ public class MeetingRoomServiceImpl extends ServiceImpl<MeetingRoomMapper, Meeti
     implements MeetingRoomService{
 
     /**
-     * 获取会议室查询条件(根据会议室name)
+     * 获取会议室查询条件(根据会议室name,会议室是否为空)
      * @param meetingRoomQueryRequest 会议室查询请求
      * @return
      */
@@ -46,12 +46,14 @@ public class MeetingRoomServiceImpl extends ServiceImpl<MeetingRoomMapper, Meeti
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
 
-        String meetingRoomName = meetingRoomQueryRequest.getMeetingRoomName();
+        String meetingRoomName = meetingRoomQueryRequest.getName();
+        Integer isEmpty = meetingRoomQueryRequest.getIsEmpty();
         String sortField = meetingRoomQueryRequest.getSortField();
         String sortOrder = meetingRoomQueryRequest.getSortOrder();
 
         QueryWrapper<MeetingRoom> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(meetingRoomName), "name", meetingRoomName);
+        queryWrapper.eq(isEmpty != null,"isEmpty",isEmpty);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
@@ -128,14 +130,7 @@ public class MeetingRoomServiceImpl extends ServiceImpl<MeetingRoomMapper, Meeti
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        //查询出原来的数据
-        QueryWrapper<MeetingRoom> meetingRoomQueryWrapper = new QueryWrapper<>();
-        meetingRoomQueryWrapper.eq("id", id);
-        MeetingRoom meetingRoom = this.getOne(meetingRoomQueryWrapper);
-        if(meetingRoom == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        //新数据覆盖旧数据
+        MeetingRoom meetingRoom = new MeetingRoom();
         BeanUtils.copyProperties(meetingRoomUpdateRequest,meetingRoom);
         return this.updateById(meetingRoom);
     }

@@ -14,6 +14,7 @@ import com.lib.model.dto.announcement.AnnouncementUpdateRequest;
 import com.lib.model.entity.Announcement;
 import com.lib.model.entity.User;
 import com.lib.model.vo.AnnouncementVO;
+import com.lib.model.vo.UserVO;
 import com.lib.service.AnnouncementService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
@@ -48,14 +49,29 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
         }
 
         String content = announcementQueryRequest.getContent();
-        Long creatorId = announcementQueryRequest.getCreatorId();
+        String account = announcementQueryRequest.getAccount();
+        String name = announcementQueryRequest.getName();
+
+        User user = new User();
+        Long creatorId = user.getId();
+        if(StringUtils.isNotBlank(account)){
+            //根据用户账号查找userId
+            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("account",account);
+
+            user = userService.getOne(queryWrapper);
+            if(user == null){
+                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            }
+            creatorId = user.getId();
+        }
         String sortField = announcementQueryRequest.getSortField();
         String sortOrder = announcementQueryRequest.getSortOrder();
 
-
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(name),"name",name);
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
-        queryWrapper.eq(creatorId != null, "creatorId", creatorId);
+        queryWrapper.eq(StringUtils.isNotBlank(account), "creatorId", creatorId);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
@@ -74,8 +90,17 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
         if (announcement == null) {
             return null;
         }
+
+        Long creatorId = announcement.getCreatorId();
+        User user = userService.getById(creatorId);
+        if(user == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        UserVO userVO = UserVO.objToVo(user);
+
         AnnouncementVO announcementVO = new AnnouncementVO();
         BeanUtils.copyProperties(announcement, announcementVO);
+        announcementVO.setUserVO(userVO);
         return announcementVO;
     }
 
@@ -92,8 +117,9 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
         }
 
         String content = announcementAddRequest.getContent();
+        String name = announcementAddRequest.getName();
 
-        if(StringUtils.isAnyBlank(content)){
+        if(StringUtils.isAnyBlank(content,name)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
@@ -143,6 +169,19 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
 
         Long announcementId = deleteRequest.getId();
         return this.removeById(announcementId);
+    }
+
+    /**
+     * 获取最新公告
+     * @return
+     */
+    @Override
+    public AnnouncementVO getNewAnnouncement() {
+        QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("createTime");
+        List<Announcement> announcementList = this.list(queryWrapper);
+        List<AnnouncementVO> announcementVO = this.getAnnouncementVO(announcementList);
+        return announcementVO.get(0);
     }
 }
 

@@ -12,7 +12,7 @@ public class MeetingRoomBorrowRecordUpdateRequest implements Serializable {
     /**
      * 借书记录id
      */
-    private Long meetingRoomBorrowRecordId;
+    private Long id;
 
     private static final long serialVersionUID = 1L;
 }

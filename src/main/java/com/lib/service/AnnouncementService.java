@@ -61,4 +61,9 @@ public interface AnnouncementService extends IService<Announcement> {
      * @return
      */
     boolean deleteAnnouncement(DeleteRequest deleteRequest);
+
+    /**
+     * 获取最新公告
+     */
+    AnnouncementVO getNewAnnouncement();
 }
