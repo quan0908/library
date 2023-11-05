@@ -1,12 +1,10 @@
 package com.lib.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lib.annotation.AuthCheck;
 import com.lib.common.BaseResponse;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
 import com.lib.common.ResultUtils;
-import com.lib.constant.UserConstant;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.meeting.*;
@@ -73,9 +71,9 @@ public class MeetingController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
-    public BaseResponse<Boolean> addMeeting(@RequestBody MeetingAddRequest meetingAddRequest){
-        if(meetingService.addMeeting(meetingAddRequest)){
+    public BaseResponse<Boolean> addMeeting(@RequestBody MeetingAddRequest meetingAddRequest,
+                                                        HttpServletRequest request){
+        if(meetingService.addMeeting(meetingAddRequest,request)){
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");

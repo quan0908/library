@@ -26,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,7 +132,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting>
      * @return
      */
     @Override
-    public boolean addMeeting(MeetingAddRequest meetingAddRequest) {
+    public boolean addMeeting(MeetingAddRequest meetingAddRequest, HttpServletRequest request) {
         //参数校验
         if(meetingAddRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -153,12 +154,13 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting>
         if(startTime.getTime() > endTime.getTime()){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-
         Meeting meeting = new Meeting();
         meeting.setName(meetingName);
         meeting.setMeetingRoomId(meetingRoomId);
         meeting.setStartTime(startTime);
         meeting.setEndTime(endTime);
+        User user = userService.getLoginUser(request);
+        meeting.setCreatorId(user.getId());
         return this.save(meeting);
     }
 

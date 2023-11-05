@@ -114,7 +114,6 @@ CREATE TABLE if not exists user
 
 CREATE TABLE if not exists announcement(
     id          bigint      PRIMARY KEY   COMMENT '公告id',
-    name       varchar(256) not null      comment '公告名字',
     content     text        NOT NULL      COMMENT '公告内容',
     creatorId   bigint      NOT NULL      COMMENT '公告发布人',
     createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',

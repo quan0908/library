@@ -38,7 +38,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     private UserService userService;
 
     /**
-     * 获取公告查询条件(公告名，公告类型，公告作者)
+     * 获取公告查询条件(公告类型，公告作者)
      * @param announcementQueryRequest 公告查询请求
      * @return
      */
@@ -50,7 +50,6 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
 
         String content = announcementQueryRequest.getContent();
         String account = announcementQueryRequest.getAccount();
-        String name = announcementQueryRequest.getName();
 
         User user = new User();
         Long creatorId = user.getId();
@@ -69,7 +68,6 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
         String sortOrder = announcementQueryRequest.getSortOrder();
 
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(name),"name",name);
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
         queryWrapper.eq(StringUtils.isNotBlank(account), "creatorId", creatorId);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
@@ -117,9 +115,8 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
         }
 
         String content = announcementAddRequest.getContent();
-        String name = announcementAddRequest.getName();
 
-        if(StringUtils.isAnyBlank(content,name)){
+        if(StringUtils.isAnyBlank(content)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 

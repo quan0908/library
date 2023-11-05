@@ -23,11 +23,6 @@ public class Announcement implements Serializable {
     private Long id;
 
     /**
-     * 公告名
-     */
-    private String name;
-
-    /**
      * 公告内容
      */
     private String content;

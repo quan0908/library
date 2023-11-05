@@ -161,7 +161,7 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        Long meetingRoomBorrowRecordId = meetingRoomUpdateRequest.getMeetingRoomBorrowRecordId();
+        Long meetingRoomBorrowRecordId = meetingRoomUpdateRequest.getId();
         if(meetingRoomBorrowRecordId == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

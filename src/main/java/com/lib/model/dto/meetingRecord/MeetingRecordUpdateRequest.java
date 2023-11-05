@@ -15,6 +15,11 @@ import java.util.Date;
 @Data
 public class MeetingRecordUpdateRequest implements Serializable {
     /**
+     * 会议记录id
+     */
+    private Long id;
+
+    /**
      * 会议id
      */
     private Long meetingId;

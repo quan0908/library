@@ -16,11 +16,6 @@ import java.io.Serializable;
 @Data
 public class AnnouncementQueryRequest extends PageRequest implements Serializable {
     /**
-     * 公告名
-     */
-    private String name;
-
-    /**
      * 公告内容
      */
     private String content;

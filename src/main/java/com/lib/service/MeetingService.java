@@ -10,6 +10,7 @@ import com.lib.model.entity.Meeting;
 import com.lib.model.entity.Meeting;
 import com.lib.model.vo.MeetingVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public interface MeetingService extends IService<Meeting> {
      * @param meetingAddRequest 会议添加请求
      * @return 是否添加成功
      */
-    boolean addMeeting(MeetingAddRequest meetingAddRequest);
+    boolean addMeeting(MeetingAddRequest meetingAddRequest, HttpServletRequest request);
 
     /**
      * 修改图书

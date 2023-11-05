@@ -7,7 +7,6 @@
     <resultMap id="BaseResultMap" type="com.lib.model.entity.Announcement">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="creatorId" column="creatorId" jdbcType="BIGINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
@@ -15,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,content,creatorId,
+        id,content,creatorId,
         createTime,updateTime,isDelete
     </sql>
 </mapper>
