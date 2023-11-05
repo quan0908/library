@@ -13,7 +13,7 @@ public class MeetingRoomBorrowRecordVO implements Serializable {
     /**
      * 会议室申请记录id
      */
-    private Long meetingRoomRecordId;
+    private Long id;
 
     /**
      * 会议室VO

@@ -109,7 +109,7 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         MeetingRoomBorrowRecordVO meetingRoomBorrowRecordVO = new MeetingRoomBorrowRecordVO();
         meetingRoomBorrowRecordVO.setMeetingRoomVO(meetingRoomVO);
         meetingRoomBorrowRecordVO.setUserVO(userVO);
-        meetingRoomBorrowRecordVO.setMeetingRoomRecordId(meetingRoomBorrowRecord.getId());
+        meetingRoomBorrowRecordVO.setId(meetingRoomBorrowRecord.getId());
         meetingRoomBorrowRecordVO.setBorrowTime(meetingRoomBorrowRecord.getBorrowTime());
         return meetingRoomBorrowRecordVO;
     }

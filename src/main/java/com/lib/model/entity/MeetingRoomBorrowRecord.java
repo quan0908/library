@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class MeetingRoomBorrowRecord implements Serializable {
     /**
-     * 会议室id
+     * 会议室记录id
      */
     @TableId
     private Long id;
