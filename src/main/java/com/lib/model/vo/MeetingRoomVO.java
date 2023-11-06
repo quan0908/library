@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author quan
@@ -30,6 +31,11 @@ public class MeetingRoomVO implements Serializable {
      * 会议室是否空
      */
     private Integer isEmpty;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 

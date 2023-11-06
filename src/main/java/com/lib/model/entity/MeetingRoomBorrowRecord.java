@@ -32,9 +32,14 @@ public class MeetingRoomBorrowRecord implements Serializable {
     private Long meetingRoomId;
 
     /**
-     * 租借时间
+     * 起始时间
      */
-    private Date borrowTime;
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    private Date endTime;
 
     /**
      * 是否归还

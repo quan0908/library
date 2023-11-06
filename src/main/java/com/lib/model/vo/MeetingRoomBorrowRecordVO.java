@@ -26,9 +26,14 @@ public class MeetingRoomBorrowRecordVO implements Serializable {
     private UserVO userVO;
 
     /**
-     * 借会议室时间
+     * 起始时间
      */
-    private Date borrowTime;
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    private Date endTime;
 
     private static final long serialVersionUID = 1L;
 }

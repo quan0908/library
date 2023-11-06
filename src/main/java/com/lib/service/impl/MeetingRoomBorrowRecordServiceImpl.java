@@ -5,15 +5,16 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
+import com.lib.constant.BookConstant;
 import com.lib.constant.CommonConstant;
 import com.lib.constant.MeetingRoomConstant;
 import com.lib.exception.BusinessException;
+import com.lib.exception.ThrowUtils;
+import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordAddRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordAddRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordQueryRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordUpdateRequest;
-import com.lib.model.entity.MeetingRoom;
-import com.lib.model.entity.MeetingRoomBorrowRecord;
-import com.lib.model.entity.User;
+import com.lib.model.entity.*;
 import com.lib.model.vo.MeetingRoomBorrowRecordVO;
 import com.lib.model.vo.MeetingRoomVO;
 import com.lib.model.vo.UserVO;
@@ -22,6 +23,7 @@ import com.lib.mapper.MeetingRoomBorrowRecordMapper;
 import com.lib.service.MeetingRoomService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -109,8 +111,8 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         MeetingRoomBorrowRecordVO meetingRoomBorrowRecordVO = new MeetingRoomBorrowRecordVO();
         meetingRoomBorrowRecordVO.setMeetingRoomVO(meetingRoomVO);
         meetingRoomBorrowRecordVO.setUserVO(userVO);
-        meetingRoomBorrowRecordVO.setId(meetingRoomBorrowRecord.getId());
-        meetingRoomBorrowRecordVO.setBorrowTime(meetingRoomBorrowRecord.getBorrowTime());
+        meetingRoomBorrowRecordVO.setStartTime(meetingRoomBorrowRecord.getStartTime());
+        meetingRoomBorrowRecordVO.setEndTime(meetingRoomBorrowRecord.getEndTime());
         return meetingRoomBorrowRecordVO;
     }
 
@@ -128,24 +130,48 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         }
 
         Long meetingRoomId = meetingRoomBorrowRecordAddRequest.getMeetingRoomId();
-        Date borrowTime = meetingRoomBorrowRecordAddRequest.getBorrowTime();
-        //获取当前id
-        User user = userService.getLoginUser(request);
+        String username = meetingRoomBorrowRecordAddRequest.getUsername();
+        String idCard = meetingRoomBorrowRecordAddRequest.getIdCard();
+        Date startTime = meetingRoomBorrowRecordAddRequest.getStartTime();
+        Date endTime = meetingRoomBorrowRecordAddRequest.getEndTime();
 
-        //判断这本会议室在数据库中是否存在
-        if(meetingRoomService.getById(meetingRoomId) == null){
+        MeetingRoom meetingRoom = meetingRoomService.getById(meetingRoomId);
+
+        if(meetingRoomId == null || startTime == null|| endTime == null||meetingRoom == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if(meetingRoom.getIsEmpty() != 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"该会议室以借出");
+        }
+
+        if(StringUtils.isAnyBlank(idCard,username)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        //判断选的时间是否早于当前
-        if(borrowTime.getTime() - System.currentTimeMillis() < 0){
+        //对用户进行校验
+        User user = userService.getLoginUser(request);
+        if(!user.getIdCard().equals(idCard)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if(!user.getUsername().equals(username)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+
+        //TODO 对于时间的校验，应当更为严格
+        if(startTime.getTime() - System.currentTimeMillis() < 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        if(endTime.getTime() - startTime.getTime() < 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         //加入数据库
         MeetingRoomBorrowRecord meetingRoomBorrowRecord = new MeetingRoomBorrowRecord();
         meetingRoomBorrowRecord.setMeetingRoomId(meetingRoomId);
-        meetingRoomBorrowRecord.setBorrowTime(borrowTime);
+        meetingRoomBorrowRecord.setEndTime(endTime);
+        meetingRoomBorrowRecord.setStartTime(startTime);
         meetingRoomBorrowRecord.setUserId(user.getId());
         return this.save(meetingRoomBorrowRecord);
     }

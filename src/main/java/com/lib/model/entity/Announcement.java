@@ -22,6 +22,7 @@ public class Announcement implements Serializable {
     @TableId
     private Long id;
 
+
     /**
      * 公告内容
      */
