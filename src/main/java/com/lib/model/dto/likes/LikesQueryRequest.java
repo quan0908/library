@@ -1,27 +1,25 @@
-package com.lib.model.dto.meetingRecord;
-
+package com.lib.model.dto.likes;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.lib.common.PageRequest;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 会议记录添加请求
- *  @author quan
+ * 点赞查询请求
+ * @author quan
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class MeetingRecordAddRequest implements Serializable {
+public class LikesQueryRequest extends PageRequest implements Serializable {
     /**
-     * 会议id
+     * 用户账号
      */
-    private Long meetingId;
+    private String account;
 
-    /**
-     * 参与人id
-     */
-    private Long participantId;
     private static final long serialVersionUID = 1L;
 }

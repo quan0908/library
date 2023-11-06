@@ -111,13 +111,12 @@ public class MeetingRecordServiceImpl extends ServiceImpl<MeetingRecordMapper, M
         }
         UserVO userVO = UserVO.objToVo(user);
 
-        //转成meetingRecordRoomVO
+        //转成meetingVO
         Meeting meeting = meetingService.getById(meetingId);
         if(meeting == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        MeetingVO meetingVO = MeetingVO.objToVo(meeting);
-
+        MeetingVO meetingVO = meetingService.getMeetingVO(meeting);
         MeetingRecordVO meetingRecordVO = new MeetingRecordVO();
         BeanUtils.copyProperties(meetingRecord, meetingRecordVO);
         meetingRecordVO.setMeetingVO(meetingVO);

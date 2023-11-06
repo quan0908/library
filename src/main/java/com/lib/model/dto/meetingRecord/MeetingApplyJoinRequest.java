@@ -13,4 +13,5 @@ public class MeetingApplyJoinRequest implements Serializable {
      * 会议id
      */
     private Long meetingId;
+    private static final long serialVersionUID = 1L;
 }

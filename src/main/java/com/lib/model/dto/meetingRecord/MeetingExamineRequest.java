@@ -18,4 +18,5 @@ public class MeetingExamineRequest implements Serializable {
      * 0-未审核 1-同意 2-不同意
      */
     private Integer status;
+    private static final long serialVersionUID = 1L;
 }

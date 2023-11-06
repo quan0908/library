@@ -1,4 +1,4 @@
-package com.lib.model.dto.meetingRecord;
+package com.lib.model.dto.likeRecord;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,19 +9,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 会议记录添加请求
+ * 点赞记录添加请求
  *  @author quan
  */
 @Data
-public class MeetingRecordAddRequest implements Serializable {
+public class LikeRecordAddRequest implements Serializable {
     /**
-     * 会议id
+     * 点赞id
      */
-    private Long meetingId;
+    private Long likesId;
 
     /**
-     * 参与人id
+     * 点赞状态 0-点赞 1-取消点赞
      */
-    private Long participantId;
+    private Integer status;
     private static final long serialVersionUID = 1L;
 }
