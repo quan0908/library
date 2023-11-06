@@ -35,7 +35,6 @@ public class MeetingRoomBorrowController {
     private MeetingRoomBorrowRecordService meetingRoomBorrowRecordService;
 
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Page<MeetingRoomBorrowRecord>> listMeetingRoomBorrowRecordByPage(@RequestBody MeetingRoomBorrowRecordQueryRequest
                                                                                    meetingRoomBorrowRecordQueryRequest,
                                                                                     HttpServletRequest request) {
@@ -73,7 +72,7 @@ public class MeetingRoomBorrowController {
     }
 
     /**
-     * 添加图会议室
+     * 添加会议室记录
      * @param meetingRoomBorrowRecordAddRequest 借会议室记录添加请求
      * @return
      */
@@ -105,7 +104,7 @@ public class MeetingRoomBorrowController {
      * @return
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
     public BaseResponse<Void> deleteMeetingRoom(@RequestBody DeleteRequest deleteRequest){
         if(meetingRoomBorrowRecordService.deleteMeetingRoomBorrowRecord(deleteRequest)){
             return ResultUtils.success(null);

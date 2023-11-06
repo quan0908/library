@@ -3,9 +3,8 @@ package com.lib.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.common.DeleteRequest;
-import com.lib.model.dto.meetingRecord.MeetingRecordAddRequest;
-import com.lib.model.dto.meetingRecord.MeetingRecordQueryRequest;
-import com.lib.model.dto.meetingRecord.MeetingRecordUpdateRequest;
+import com.lib.model.dto.meeting.MeetingAddRequest;
+import com.lib.model.dto.meetingRecord.*;
 import com.lib.model.entity.MeetingRecord;
 import com.lib.model.vo.MeetingRecordVO;
 
@@ -46,6 +45,19 @@ public interface MeetingRecordService extends IService<MeetingRecord> {
      * @return 是否添加成功
      */
     boolean addMeetingRecord(MeetingRecordAddRequest meetingRecordAddRequest);
+
+    /**
+     * 申请加入会议
+     * @param meetingApplyJoinRequest 会议申请加入请求
+     * @return
+     */
+    boolean applyJoinMeeting(MeetingApplyJoinRequest meetingApplyJoinRequest, HttpServletRequest request);
+
+    /**
+     * 审核加入会议请求
+     * @return
+     */
+    boolean examineMeeting(MeetingExamineRequest meetingExamineRequest,HttpServletRequest request);
 
     /**
      * 修改会议

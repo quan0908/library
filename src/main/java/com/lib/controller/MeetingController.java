@@ -1,6 +1,7 @@
 package com.lib.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.lib.common.BaseResponse;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
@@ -8,8 +9,13 @@ import com.lib.common.ResultUtils;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.meeting.*;
+import com.lib.model.dto.meetingRecord.MeetingApplyJoinRequest;
+import com.lib.model.dto.meetingRecord.MeetingExamineRequest;
 import com.lib.model.entity.Meeting;
+import com.lib.model.entity.MeetingRecord;
 import com.lib.model.vo.MeetingVO;
+import com.lib.service.MeetingRecordService;
+import com.lib.service.MeetingRoomService;
 import com.lib.service.MeetingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +27,9 @@ import java.util.List;
 public class MeetingController {
     @Resource
     private MeetingService meetingService;
+
+    @Resource
+    private MeetingRecordService meetingRecordService;
     
     /**
      * 分页获取会议列表
@@ -118,4 +127,33 @@ public class MeetingController {
 
         return ResultUtils.success(meetingVO);
     }
+
+    /**
+     * 申请加入会议
+     * @param meetingApplyRequest 申请加入会议请求
+     * @param request
+     * @return
+     */
+    @PostMapping("/apply")
+    public BaseResponse<Void> applyJoinMeeting(@RequestBody MeetingApplyJoinRequest meetingApplyRequest,
+                                                        HttpServletRequest request){
+        if(!meetingRecordService.applyJoinMeeting(meetingApplyRequest,request)){
+            return ResultUtils.error(ErrorCode.OPERATION_ERROR,"申请失败，请检查会议id是否正确");
+        }
+        return ResultUtils.success(null);
+    }
+
+    /**
+     * 审核用户加入会议
+     */
+    @PostMapping
+    public BaseResponse<Void> examineMeeting(@RequestBody MeetingExamineRequest meetingExamineRequest,
+                                                          HttpServletRequest request){
+        if(!meetingRecordService.examineMeeting(meetingExamineRequest,request)){
+            return ResultUtils.error(ErrorCode.OPERATION_ERROR,"提交审核失败");
+        }
+        return ResultUtils.success(null);
+    }
+
+
 }

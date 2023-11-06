@@ -76,7 +76,6 @@ public class MeetingRecordController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Boolean> addMeetingRecord(@RequestBody MeetingRecordAddRequest meetingRecordAddRequest){
         if(meetingRecordService.addMeetingRecord(meetingRecordAddRequest)){
             return ResultUtils.success(null);

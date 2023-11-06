@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 public class MeetingRoomBorrowRecordUpdateRequest implements Serializable {
     /**
-     * 借书记录id
+     * 借会议室记录id
      */
     private Long id;
 

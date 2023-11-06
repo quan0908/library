@@ -8,9 +8,7 @@ import com.lib.common.ErrorCode;
 import com.lib.constant.CommonConstant;
 import com.lib.exception.BusinessException;
 import com.lib.mapper.MeetingRecordMapper;
-import com.lib.model.dto.meetingRecord.MeetingRecordAddRequest;
-import com.lib.model.dto.meetingRecord.MeetingRecordQueryRequest;
-import com.lib.model.dto.meetingRecord.MeetingRecordUpdateRequest;
+import com.lib.model.dto.meetingRecord.*;
 import com.lib.model.entity.Meeting;
 import com.lib.model.entity.MeetingRecord;
 import com.lib.model.entity.User;
@@ -26,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -149,6 +148,80 @@ public class MeetingRecordServiceImpl extends ServiceImpl<MeetingRecordMapper, M
         meetingRecord.setMeetingId(meetingId);
         meetingRecord.setParticipantId(participantId);
         return this.save(meetingRecord);
+    }
+
+    /**
+     * 申请加入会议
+     * @param meetingApplyJoinRequest
+     * @param request
+     * @return
+     */
+    @Override
+    public boolean applyJoinMeeting(MeetingApplyJoinRequest meetingApplyJoinRequest, HttpServletRequest request) {
+        if(meetingApplyJoinRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long meetingId = meetingApplyJoinRequest.getMeetingId();
+        if(meetingId == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Meeting meeting = meetingService.getById(meetingId);
+        if(meeting == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        //判断用户是否已经提交了申请
+        QueryWrapper<MeetingRecord> meetingRecordQueryWrapper = new QueryWrapper<>();
+        meetingRecordQueryWrapper.eq("meetingId",meeting.getId());
+        Long participantId = userService.getLoginUser(request).getId();
+        meetingRecordQueryWrapper.eq("participantId",participantId);
+
+        if(this.getOne(meetingRecordQueryWrapper) != null){
+            throw new BusinessException(ErrorCode.APPLY_ERROR);
+        }
+
+        MeetingRecord meetingRecord = new MeetingRecord();
+        meetingRecord.setMeetingId(meetingId);
+        meetingRecord.setParticipantId(participantId);
+        return this.save(meetingRecord);
+    }
+
+    /**
+     * 审核加入会议
+     * @param meetingExamineRequest
+     * @param request
+     * @return
+     */
+    @Override
+    public boolean examineMeeting(MeetingExamineRequest meetingExamineRequest, HttpServletRequest request) {
+        //参数校验
+        if(meetingExamineRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = meetingExamineRequest.getId();
+        Integer status = meetingExamineRequest.getStatus();
+        if(id == null || status == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        MeetingRecord meetingRecord = this.getById(id);
+        if(meetingRecord == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long meetingId = meetingRecord.getMeetingId();
+        Meeting meeting = meetingService.getById(meetingId);
+        Long creatorId = meeting.getCreatorId();
+        User user = userService.getLoginUser(request);
+        //判断当前用户有无操作权限,只有会议发起人才有权限
+        if(!user.getId().equals(creatorId)){
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+
+        MeetingRecordUpdateRequest meetingRecordUpdateRequest = new MeetingRecordUpdateRequest();
+        BeanUtils.copyProperties(meetingRecord,meetingRecordUpdateRequest);
+        meetingRecordUpdateRequest.setStatus(meetingExamineRequest.getStatus());
+        return this.updateMeetingRecord(meetingRecordUpdateRequest);
     }
 
     /**

@@ -7,7 +7,6 @@ import com.lib.model.dto.meeting.MeetingAddRequest;
 import com.lib.model.dto.meeting.MeetingQueryRequest;
 import com.lib.model.dto.meeting.MeetingUpdateRequest;
 import com.lib.model.entity.Meeting;
-import com.lib.model.entity.Meeting;
 import com.lib.model.vo.MeetingVO;
 
 import javax.servlet.http.HttpServletRequest;

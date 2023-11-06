@@ -164,6 +164,8 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting>
         return this.save(meeting);
     }
 
+
+
     /**
      * 修改会议
      * @param meetingUpdateRequest 会议修改请求

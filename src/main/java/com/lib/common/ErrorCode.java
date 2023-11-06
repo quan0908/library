@@ -17,8 +17,7 @@ public enum ErrorCode {
     OPERATION_ERROR(50001, "操作失败"),
     BOOK_BORROW_TOTAL_ERROR(50020,"图书数量不够，借书失败"),
     BOOK_BORROW_ERROR(50020,"相同的图书未归还，借书失败"),
-
-
+    APPLY_ERROR(50030,"已申请，请勿重复提交申请"),
     API_REQUEST_ERROR(50010, "接口调用失败");
 
     /**
