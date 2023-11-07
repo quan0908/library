@@ -9,7 +9,8 @@
             <result property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="meetingRoomId" column="meetingRoomId" jdbcType="BIGINT"/>
             <result property="isReturn" column="meetingRoomId" jdbcType="INTEGER"/>
-            <result property="borrowTime" column="borrowTime" jdbcType="TIMESTAMP"/>
+            <result property="startTime" column="startTime" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="endTime" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>

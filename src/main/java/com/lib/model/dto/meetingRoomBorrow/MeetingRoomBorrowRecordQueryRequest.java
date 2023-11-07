@@ -25,9 +25,14 @@ public class MeetingRoomBorrowRecordQueryRequest extends PageRequest implements 
     private Long meetingRoomId;
 
     /**
-     * 借用时间
+     * 起始时间
      */
-    private Date borrowTime;
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    private Date endTime;
 
     private static final long serialVersionUID = 1L;
 }

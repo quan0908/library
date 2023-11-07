@@ -12,13 +12,12 @@ import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.meetingRoom.MeetingRoomAddRequest;
 import com.lib.model.dto.meetingRoom.MeetingRoomQueryRequest;
 import com.lib.model.dto.meetingRoom.MeetingRoomUpdateRequest;
+import com.lib.model.entity.Book;
 import com.lib.model.entity.MeetingRoom;
+import com.lib.model.vo.BookVO;
 import com.lib.model.vo.MeetingRoomVO;
 import com.lib.service.MeetingRoomService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -119,5 +118,20 @@ public class MeetingRoomController {
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
+    }
+
+    @GetMapping("/get")
+    public BaseResponse<MeetingRoomVO> getMeetingRoomById(Long id){
+        if(id == null || id <= 0 ){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        MeetingRoom meetingRoom = meetingRoomService.getById(id);
+
+        if(meetingRoom == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        MeetingRoomVO meetingRoomVO = meetingRoomService.getMeetingRoomVO(meetingRoom);
+
+        return ResultUtils.success(meetingRoomVO);
     }
 }
