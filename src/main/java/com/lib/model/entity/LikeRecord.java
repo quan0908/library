@@ -2,6 +2,7 @@ package com.lib.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,20 +17,20 @@ import java.util.Date;
 @Data
 public class LikeRecord implements Serializable {
     /**
-     * 点赞记录id
+     * 点赞id
      */
     @TableId
     private Long id;
 
     /**
-     * 点赞id
+     * 评论id
      */
-    private Long likesId;
+    private Long commentId;
 
     /**
-     * 点赞状态 0-点赞 1-取消点赞
+     * 用户id
      */
-    private Integer status;
+    private Long userId;
 
     /**
      * 创建时间
@@ -41,6 +42,7 @@ public class LikeRecord implements Serializable {
      */
     private Date updateTime;
 
+    @TableLogic
     /**
      * 0-不删 1删
      */

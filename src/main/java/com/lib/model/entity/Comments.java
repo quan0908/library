@@ -42,6 +42,11 @@ public class Comments implements Serializable {
     private Long checkUserId;
 
     /**
+     * 评论点赞数量
+     */
+    private Integer likeNumber;
+
+    /**
      * 0-待审核 1-审核通过 2-审核未通过
      */
     private Integer isChecked;

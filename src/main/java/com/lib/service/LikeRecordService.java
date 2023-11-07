@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.common.DeleteRequest;
 import com.lib.model.dto.likeRecord.LikeRecordAddRequest;
+import com.lib.model.dto.likeRecord.LikeRecordCancelRequest;
 import com.lib.model.dto.likeRecord.LikeRecordQueryRequest;
-import com.lib.model.dto.likes.LikesAddRequest;
-import com.lib.model.dto.likes.LikesCancelRequest;
 import com.lib.model.entity.LikeRecord;
 import com.lib.model.vo.LikeRecordVO;
 
@@ -20,18 +19,18 @@ public interface LikeRecordService extends IService<LikeRecord> {
     /**
      * 获取查询条件
      *
-     * @param meetingRecordQueryRequest 点赞记录查询请求
+     * @param likeRecordQueryRequest 点赞记录查询请求
      * @return
      */
-    QueryWrapper<LikeRecord> getQueryWrapper(LikeRecordQueryRequest meetingRecordQueryRequest);
+    QueryWrapper<LikeRecord> getQueryWrapper(LikeRecordQueryRequest likeRecordQueryRequest);
 
     /**
      * 获取点赞信息
      *
-     * @param meetingRecordList 点赞记录集合
+     * @param likeRecordList 点赞记录集合
      * @return
      */
-    List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> meetingRecordList);
+    List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> likeRecordList);
 
     /**
      * 获取点赞记录信息
@@ -39,30 +38,14 @@ public interface LikeRecordService extends IService<LikeRecord> {
      * @param meetingRecord
      * @return
      */
-    LikeRecordVO getLikeRecordVO(LikeRecord meetingRecord);
+    LikeRecordVO getLikeRecordVO(LikeRecord likeRecord);
 
     /**
      * 添加点赞记录
-     * @param meetingRecordAddRequest 点赞记录请求
+     * @param likeRecordAddRequest 点赞记录添加请求
      * @return 是否添加成功
      */
-    boolean addLikeRecord(LikeRecordAddRequest meetingRecordAddRequest);
-
-    /**
-     * 点赞
-     * @param likesAddRequest 点赞添加请求
-     * @param request
-     * @return
-     */
-    boolean like(LikesAddRequest likesAddRequest,HttpServletRequest request);
-
-    /**
-     * 取消点赞
-     * @param likesCancelRequest 点赞取消请求
-     * @param request
-     * @return
-     */
-    boolean cancelLike(LikesCancelRequest likesCancelRequest,HttpServletRequest request);
+    boolean addLikeRecord(LikeRecordAddRequest likeRecordAddRequest,HttpServletRequest request);
 
     /**
      * 删除点赞
@@ -70,4 +53,21 @@ public interface LikeRecordService extends IService<LikeRecord> {
      * @return
      */
     boolean deleteLikeRecord(DeleteRequest deleteRequest);
+
+    /**
+     * 点赞
+     * @param likeRecordAddRequest 点赞记录添加请求
+     * @param request
+     * @return
+     */
+    boolean like(LikeRecordAddRequest likeRecordAddRequest,HttpServletRequest request);
+
+    /**
+     * 取消点赞
+     * @param likeRecordCancelRequest 点赞取消请求
+     * @param request
+     * @return
+     */
+    boolean cancelLike(LikeRecordCancelRequest likeRecordCancelRequest,HttpServletRequest request);
+
 }

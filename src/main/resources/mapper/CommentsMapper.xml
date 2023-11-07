@@ -10,6 +10,7 @@
         <result property="userId" column="userId" jdbcType="BIGINT"/>
         <result property="bookId" column="bookId" jdbcType="BIGINT"/>
         <result property="checkUserId" column="checkUserId" jdbcType="BIGINT"/>
+        <result property="likeNumber" column="likeNumber" jdbcType="INTEGER"/>
         <result property="isChecked" column="isChecked" jdbcType="TINYINT"/>
         <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
@@ -18,7 +19,7 @@
 
     <sql id="Base_Column_List">
         id,content,userId,
-        bookId,checkUserId,isChecked,
+        bookId,checkUserId,isChecked,likeNumber,
         createTime,updateTime,isDelete
     </sql>
 </mapper>

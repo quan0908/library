@@ -1,15 +1,14 @@
-package com.lib.model.dto.likes;
+package com.lib.model.dto.likeRecord;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * 点赞取消请求
- *  @author quan
+ * 取消点赞请求
  */
 @Data
-public class LikesCancelRequest implements Serializable {
+public class LikeRecordCancelRequest implements Serializable {
     /**
      * 评论id
      */

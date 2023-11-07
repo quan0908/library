@@ -6,15 +6,15 @@
 
     <resultMap id="BaseResultMap" type="com.lib.model.entity.LikeRecord">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="likesId" column="likesId" jdbcType="BIGINT"/>
-            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="commentId" column="commentId" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,likesId,status,
+        id,commentId,userId,
         createTime,updateTime,isDelete
     </sql>
 </mapper>

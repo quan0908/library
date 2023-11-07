@@ -1,7 +1,10 @@
 package com.lib.model.vo;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 点赞记录VO
@@ -9,18 +12,18 @@ import java.io.Serializable;
 @Data
 public class LikeRecordVO implements Serializable {
     /**
-     * 点赞记录id
+     * 点赞id
      */
     private Long id;
 
     /**
-     * 点赞VO
+     * 评论VO
      */
-    private LikesVO likesVO;
+    private CommentsVO commentsVO;
 
     /**
-     * 点赞状态 0-点赞 1-取消点赞
+     * 用户VO
      */
-    private Integer status;
+    private UserVO userVO;
     private static final long serialVersionUID = 1L;
 }

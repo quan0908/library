@@ -55,6 +55,7 @@ CREATE TABLE if not exists comments
     content     text         NOT NULL COMMENT '评论内容',
     userId      bigint       NOT NULL COMMENT '评论用户id',
     bookId      bigint       NOT NULL COMMENT '评论图书id',
+    likeNumber  int          NOT NULL COMMENT  '评论点赞数',
     checkUserId varchar(128)  COMMENT '审核人id',
     isChecked   tinyint      DEFAULT '0' COMMENT '0-待审核 1-审核通过 2-审核未通过',
     createTime  datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
@@ -142,20 +143,11 @@ CREATE TABLE if not exists meeting(
     isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
 );
 
-create table if not exists like_record(
-    id      bigint  primary key comment '点赞记录id',
-    likesId bigint  not null  comment '点赞id',
-    status  int     not null  comment '点赞状态 0-点赞 1-取消点赞' ,
-    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
-);
-
-create table if not exists likes
+create table if not exists like_record
 (
     id         bigint primary key comment '点赞id',
-    userId     bigint                             not null comment '用户id',
     commentId  bigint                             not null comment '评论id',
+    userId     bigint                             not null comment '用户id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'

@@ -8,6 +8,7 @@ import com.lib.common.ResultUtils;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.likeRecord.LikeRecordAddRequest;
+import com.lib.model.dto.likeRecord.LikeRecordCancelRequest;
 import com.lib.model.dto.likeRecord.LikeRecordQueryRequest;
 import com.lib.model.entity.LikeRecord;
 import com.lib.model.vo.LikeRecordVO;
@@ -76,8 +77,37 @@ public class LikeRecordController {
      * @return
      */
     @PostMapping("/add")
-    public BaseResponse<Boolean> addLikeRecord(@RequestBody LikeRecordAddRequest likeRecordAddRequest){
-        if(likeRecordService.addLikeRecord(likeRecordAddRequest)){
+    public BaseResponse<Boolean> addLikeRecord(@RequestBody LikeRecordAddRequest likeRecordAddRequest,
+                                               HttpServletRequest request){
+        if(likeRecordService.addLikeRecord(likeRecordAddRequest,request)){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
+    }
+
+    /**
+     * 添加点赞记录
+     * @param likeRecordAddRequest 点赞记录添加请求
+     * @return
+     */
+    @PostMapping("/like")
+    public BaseResponse<Boolean> like(@RequestBody LikeRecordAddRequest likeRecordAddRequest,
+                                               HttpServletRequest request){
+        if(likeRecordService.like(likeRecordAddRequest,request)){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
+    }
+
+    /**
+     * 取消点赞
+     * @param likeRecordCancelRequest 取消点赞请求
+     * @return
+     */
+    @PostMapping("/cancel")
+    public BaseResponse<Boolean> cancelLike(@RequestBody LikeRecordCancelRequest likeRecordCancelRequest,
+                                               HttpServletRequest request){
+        if(likeRecordService.cancelLike(likeRecordCancelRequest,request)){
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");

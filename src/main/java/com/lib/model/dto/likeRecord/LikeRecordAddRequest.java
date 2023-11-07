@@ -15,13 +15,8 @@ import java.util.Date;
 @Data
 public class LikeRecordAddRequest implements Serializable {
     /**
-     * 点赞id
+     * 评论id
      */
-    private Long likesId;
-
-    /**
-     * 点赞状态 0-点赞 1-取消点赞
-     */
-    private Integer status;
+    private Long commentId;
     private static final long serialVersionUID = 1L;
 }

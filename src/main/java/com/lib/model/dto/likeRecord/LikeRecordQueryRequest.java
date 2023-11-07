@@ -19,14 +19,9 @@ import java.util.Date;
 @Data
 public class LikeRecordQueryRequest extends PageRequest implements Serializable {
     /**
-     * 用户账号
+     * 用户id
      */
-    private String account;
-
-    /**
-     * 点赞状态 0-点赞 1-取消点赞
-     */
-    private Integer status;
+    private Long userId;
     private static final long serialVersionUID = 1L;
 
 }
