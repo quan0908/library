@@ -1,5 +1,6 @@
 package com.lib.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import com.lib.constant.MeetingRoomConstant;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.bookBorrowRecord.BookBorrowRecordAddRequest;
+import com.lib.model.dto.meetingRoom.MeetingRoomUpdateRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordAddRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordQueryRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordUpdateRequest;
@@ -59,10 +61,11 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         Long userId = meetingRoomBorrowRecordQueryRequest.getUserId();
         String sortField = meetingRoomBorrowRecordQueryRequest.getSortField();
         String sortOrder = meetingRoomBorrowRecordQueryRequest.getSortOrder();
-
+        Integer status = meetingRoomBorrowRecordQueryRequest.getStatus();
         QueryWrapper<MeetingRoomBorrowRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(meetingRoomId != null, "meetingRoomId", meetingRoomId);
-        queryWrapper.like(userId != null, "userId", userId);
+        queryWrapper.eq(status != null, "status", status);
+        queryWrapper.eq(userId != null, "userId", userId);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
@@ -88,6 +91,8 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
      */
     @Override
     public MeetingRoomBorrowRecordVO getMeetingRoomBorrowRecordVO(MeetingRoomBorrowRecord meetingRoomBorrowRecord) {
+
+
         if(meetingRoomBorrowRecord == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -100,19 +105,30 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
         }
         MeetingRoomVO meetingRoomVO = MeetingRoomVO.objToVo(meetingRoom);
 
+        MeetingRoomBorrowRecordVO meetingRoomBorrowRecordVO = new MeetingRoomBorrowRecordVO();
         //获取userVO
         Long userId = meetingRoomBorrowRecord.getUserId();
+        meetingRoomBorrowRecordVO.setId(meetingRoomBorrowRecord.getId());
+        String checkUserId = meetingRoomBorrowRecord.getCheckUserId();
+
+        if(checkUserId != null){
+            User checkUser = userService.getById(checkUserId);
+            UserVO checkUserVO = UserVO.objToVo(checkUser);
+            meetingRoomBorrowRecordVO.setCheckUser(checkUserVO);
+        }
+
         User user = userService.getById(userId);
         if(user == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         UserVO userVO = UserVO.objToVo(user);
 
-        MeetingRoomBorrowRecordVO meetingRoomBorrowRecordVO = new MeetingRoomBorrowRecordVO();
+
         meetingRoomBorrowRecordVO.setMeetingRoomVO(meetingRoomVO);
         meetingRoomBorrowRecordVO.setUserVO(userVO);
         meetingRoomBorrowRecordVO.setStartTime(meetingRoomBorrowRecord.getStartTime());
         meetingRoomBorrowRecordVO.setEndTime(meetingRoomBorrowRecord.getEndTime());
+        meetingRoomBorrowRecordVO.setStatus(meetingRoomBorrowRecord.getStatus());
         return meetingRoomBorrowRecordVO;
     }
 
@@ -177,22 +193,31 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
     }
 
     /**
-     * 修改借会议室记录(还会议室 只修改了isReturn字段)
-     * @param meetingRoomUpdateRequest 会议室修改请求
+     *
+     * @param meetingRoomBorrowRecordUpdateRequest 会议室修改请求
      * @return
      */
     @Override
-    public boolean updateMeetingRoomBorrowRecord(MeetingRoomBorrowRecordUpdateRequest meetingRoomUpdateRequest) {
-        if(meetingRoomUpdateRequest == null){
+    public boolean updateMeetingRoomBorrowRecord(MeetingRoomBorrowRecordUpdateRequest meetingRoomBorrowRecordUpdateRequest) {
+
+        if(meetingRoomBorrowRecordUpdateRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-
-        Long meetingRoomBorrowRecordId = meetingRoomUpdateRequest.getId();
+        Long meetingRoomBorrowRecordId = meetingRoomBorrowRecordUpdateRequest.getId();
         if(meetingRoomBorrowRecordId == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        MeetingRoomBorrowRecord meetingRoomBorrowRecord = this.getById(meetingRoomBorrowRecordId);
-        meetingRoomBorrowRecord.setIsReturn(MeetingRoomConstant.RETURN);
+        //如果发现是通过，则会将会议室设置为不为空
+        if(meetingRoomBorrowRecordUpdateRequest.getStatus() == 1){
+            Long id = meetingRoomBorrowRecordUpdateRequest.getId();
+            MeetingRoomBorrowRecord borrowRecord = this.getById(id);
+            MeetingRoom meetingRoom = new MeetingRoom();
+            meetingRoom.setIsEmpty(1);
+            meetingRoom.setId(borrowRecord.getMeetingRoomId());
+            meetingRoomService.updateById(meetingRoom);
+        }
+        MeetingRoomBorrowRecord meetingRoomBorrowRecord= new MeetingRoomBorrowRecord();
+        BeanUtil.copyProperties(meetingRoomBorrowRecordUpdateRequest,meetingRoomBorrowRecord);
         return this.updateById(meetingRoomBorrowRecord);
     }
 
@@ -210,6 +235,16 @@ public class MeetingRoomBorrowRecordServiceImpl extends ServiceImpl<MeetingRoomB
 
         Long meetingRoomId = deleteRequest.getId();
         return this.removeById(meetingRoomId);
+    }
+
+    @Override
+    public Long getMeetingRoomBorrowOwner(String meetingRoomId) {
+        QueryWrapper<MeetingRoomBorrowRecord> meetingRoomBorrowRecordQueryWrapper = new QueryWrapper<>();
+        meetingRoomBorrowRecordQueryWrapper.eq("meetingRoomId",meetingRoomId);
+        meetingRoomBorrowRecordQueryWrapper.eq("status",1);
+        meetingRoomBorrowRecordQueryWrapper.orderByAsc("createTime");
+        List<MeetingRoomBorrowRecord> list = this.list(meetingRoomBorrowRecordQueryWrapper);
+        return list.get(0).getUserId();
     }
 }
 

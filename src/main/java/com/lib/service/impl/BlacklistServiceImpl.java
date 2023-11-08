@@ -1,4 +1,5 @@
 package com.lib.service.impl;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -15,15 +16,19 @@ import com.lib.model.dto.blacklist.BlacklistQueryRequest;
 import com.lib.model.dto.blacklist.BlacklistUpdateRequest;
 import com.lib.model.entity.Blacklist;
 import com.lib.model.entity.Blacklist;
+import com.lib.model.entity.User;
 import com.lib.model.vo.BlacklistVO;
 import com.lib.model.vo.BlacklistVO;
+import com.lib.model.vo.UserVO;
 import com.lib.service.BlacklistService;
 import com.lib.mapper.BlacklistMapper;
+import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +39,9 @@ import java.util.stream.Collectors;
 @Service
 public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist>
     implements BlacklistService{
+
+    @Resource
+    private UserService userService;
 
     /**
      * 获取黑名单查询条件(被拉进黑名单 userId)
@@ -52,7 +60,7 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
 
         QueryWrapper<Blacklist> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(userId != null, "blacklistName", userId);
+        queryWrapper.eq(userId != null, "blackUserId", userId);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
@@ -68,10 +76,14 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
     @Override
     public BlacklistVO getBlacklistVO(Blacklist blacklist) {
+
         if (blacklist == null) {
             return null;
         }
+        Long blackUserId = blacklist.getBlackUserId();
+        User user = userService.getById(blackUserId);
         BlacklistVO blacklistVO = new BlacklistVO();
+        blacklistVO.setBlackUser(user);
         BeanUtils.copyProperties(blacklist, blacklistVO);
         return blacklistVO;
     }
@@ -96,6 +108,7 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
         //转成blacklist并加入数据库
         Blacklist blacklist = new Blacklist();
+        blacklist.setBlackUserId(userId);
         BeanUtils.copyProperties(blacklistAddRequest,blacklist);
         return this.save(blacklist);
     }

@@ -15,9 +15,9 @@ import java.util.Date;
 @Data
 public class MeetingRecordAddRequest implements Serializable {
     /**
-     * 会议id
+     * 会议室id
      */
-    private Long meetingId;
+    private Long meetingRoomId;
 
     /**
      * 参与人id

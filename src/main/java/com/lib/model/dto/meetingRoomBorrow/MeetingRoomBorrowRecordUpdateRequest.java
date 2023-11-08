@@ -21,6 +21,15 @@ public class MeetingRoomBorrowRecordUpdateRequest implements Serializable {
     private Date startTime;
 
     /**
+     * 审核通过
+     */
+    private Integer status;
+    /**
+     * 审核人
+     */
+    private String checkUserId;
+
+    /**
      * 结束时间
      */
     private Date endTime;

@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class MeetingRoomBorrowRecord implements Serializable {
     /**
-     * 会议室记录id
+     * 会议室id
      */
     @TableId
     private Long id;
@@ -42,11 +42,6 @@ public class MeetingRoomBorrowRecord implements Serializable {
     private Date endTime;
 
     /**
-     * 是否归还
-     */
-    private Integer isReturn;
-
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -60,6 +55,16 @@ public class MeetingRoomBorrowRecord implements Serializable {
      * 0-不删 1删
      */
     private Integer isDelete;
+
+    /**
+     * 审核人id
+     */
+    private String checkUserId;
+
+    /**
+     * 0-未审核 1-同意 2-不同意
+     */
+    private Integer status;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

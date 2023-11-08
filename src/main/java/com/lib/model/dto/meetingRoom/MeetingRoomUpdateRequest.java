@@ -25,5 +25,8 @@ public class MeetingRoomUpdateRequest implements Serializable {
      */
     private Integer capacity;
 
+
+    private Integer isEmpty;
+
     private static final long serialVersionUID = 1L;
 }

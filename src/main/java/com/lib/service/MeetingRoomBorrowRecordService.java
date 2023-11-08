@@ -5,9 +5,8 @@ import com.lib.common.DeleteRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordAddRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordQueryRequest;
 import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordUpdateRequest;
-import com.lib.model.entity.MeetingRoomBorrowRecord;
-import com.lib.model.entity.MeetingRoomBorrowRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lib.model.entity.MeetingRoomBorrowRecord;
 import com.lib.model.vo.MeetingRoomBorrowRecordVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,4 +60,7 @@ public interface MeetingRoomBorrowRecordService extends IService<MeetingRoomBorr
      * @return
      */
     boolean deleteMeetingRoomBorrowRecord(DeleteRequest deleteRequest);
+
+    Long getMeetingRoomBorrowOwner(String meetingRoomId);
+
 }

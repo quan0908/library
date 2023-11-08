@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.lib.model.entity.MeetingRecord">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="meetingId" column="meetingId" jdbcType="BIGINT"/>
+            <result property="meetingRoomId" column="meetingRoomId" jdbcType="BIGINT"/>
             <result property="participantId" column="participant" jdbcType="BIGINT"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>

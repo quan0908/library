@@ -1,13 +1,8 @@
 package com.lib.model.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.lib.model.entity.Meeting;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 会议记录VO
@@ -22,7 +17,7 @@ public class MeetingRecordVO implements Serializable {
     /**
      * 会议VO
      */
-    private MeetingVO meetingVO;
+    private MeetingRoomVO meetingRoomVO;
 
     /**
      * 参与人VO

@@ -87,6 +87,8 @@ CREATE TABLE if not exists meeting_room_borrow_record
     meetingRoomId bigint NOT NULL COMMENT '租借会议室id',
     startTime    datetime     NOT NULL  COMMENT '起始时间',
     endTime    datetime     NOT NULL  COMMENT '结束时间',
+    checkUserId varchar(128)  COMMENT '审核人id',
+    status       int          default 0   NOT NULL comment '0-未审核 1-同意 2-不同意',
     createTime    datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime    datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete      tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删',
@@ -125,7 +127,7 @@ CREATE TABLE if not exists announcement(
 
 CREATE TABLE if not exists meeting_record(
     id           bigint       primary key comment '会议记录id',
-    meetingId   bigint        NOT NULL    comment '会议id',
+    meetingRoomId   bigint        NOT NULL    comment '会议室id',
     participantId  bigint     NOT NULL    comment '参与人id',
     status       int          default 0   NOT NULL comment '0-未审核 1-同意 2-不同意',
     createTime datetime       default CURRENT_TIMESTAMP not null comment '创建时间',
@@ -133,16 +135,6 @@ CREATE TABLE if not exists meeting_record(
     isDelete   tinyint        NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
 );
 
-CREATE TABLE if not exists meeting(
-    id          bigint      primary key       comment '会议id',
-    creatorId     bigint      NOT NULL    comment '会议发起人id',
-    startTime   datetime    NOT NULL comment '会议开始时间',
-    endTime     datetime    NOT NULL comment '会议结束时间',
-    meetingRoomId bigint    not null comment '会议室ID',
-    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
-);
 
 create table if not exists like_record
 (
@@ -152,6 +144,6 @@ create table if not exists like_record
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
-);
+)
 
 

@@ -41,6 +41,7 @@ public class BlackListController {
      * @return
      */
     @PostMapping("/list/page")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Page<Blacklist>> listBlacklistByPage(@RequestBody BlacklistQueryRequest blacklistQueryRequest,
                                                    HttpServletRequest request) {
         long current = blacklistQueryRequest.getCurrent();
@@ -60,6 +61,7 @@ public class BlackListController {
      * @return
      */
     @PostMapping("/list/page/vo")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Page<BlacklistVO>> listBlacklistVOByPage(@RequestBody BlacklistQueryRequest blacklistQueryRequest,
                                                        HttpServletRequest request) {
         if (blacklistQueryRequest == null) {
@@ -83,6 +85,7 @@ public class BlackListController {
      * @return
      */
     @PostMapping("/add")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Void> addBlacklist(@RequestBody BlacklistAddRequest blacklistAddRequest){
         if(blacklistService.addBlacklist(blacklistAddRequest)){
             return ResultUtils.success(null);
@@ -96,6 +99,7 @@ public class BlackListController {
      * @return
      */
     @PostMapping("/update")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Void> updateBlacklist(@RequestBody BlacklistUpdateRequest blacklistUpdateRequest){
         if(blacklistService.updateBlacklist(blacklistUpdateRequest)){
             return ResultUtils.success(null);
@@ -109,6 +113,7 @@ public class BlackListController {
      * @return
      */
     @PostMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
     public BaseResponse<Void> deleteBlacklist(@RequestBody DeleteRequest deleteRequest){
         if(blacklistService.deleteBlacklist(deleteRequest)){
             return ResultUtils.success(null);

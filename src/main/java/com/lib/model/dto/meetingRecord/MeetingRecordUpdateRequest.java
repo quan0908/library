@@ -20,9 +20,9 @@ public class MeetingRecordUpdateRequest implements Serializable {
     private Long id;
 
     /**
-     * 会议id
+     * 会议室id
      */
-    private Long meetingId;
+    private Long meetingRoomId;
 
     /**
      * 0-未审核 1-同意 2-不同意

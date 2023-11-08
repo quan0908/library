@@ -10,8 +10,8 @@ import java.io.Serializable;
 @Data
 public class MeetingApplyJoinRequest implements Serializable {
     /**
-     * 会议id
+     * 会议室id
      */
-    private Long meetingId;
+    private Long meetingRoomId;
     private static final long serialVersionUID = 1L;
 }

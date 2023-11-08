@@ -23,9 +23,9 @@ public class MeetingRecord implements Serializable {
     private Long id;
 
     /**
-     * 会议id
+     * 会议室id
      */
-    private Long meetingId;
+    private Long meetingRoomId;
 
     /**
      * 参与人id

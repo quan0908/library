@@ -28,7 +28,10 @@ public class MeetingRoomBorrowRecordQueryRequest extends PageRequest implements 
      * 起始时间
      */
     private Date startTime;
-
+    /**
+     * 0-未审核 1-同意 2-不同意
+     */
+    private Integer status;
     /**
      * 结束时间
      */

@@ -20,9 +20,9 @@ import java.util.Date;
 @Data
 public class MeetingRecordQueryRequest extends PageRequest implements Serializable {
     /**
-     * 会议id
+     * 会议室id
      */
-    private Long meetingId;
+    private Long meetingRoomId;
 
     /**
      * 参与人账号

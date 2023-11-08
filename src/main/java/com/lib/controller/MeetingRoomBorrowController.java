@@ -15,10 +15,7 @@ import com.lib.model.dto.meetingRoomBorrow.MeetingRoomBorrowRecordUpdateRequest;
 import com.lib.model.entity.MeetingRoomBorrowRecord;
 import com.lib.model.vo.MeetingRoomBorrowRecordVO;
 import com.lib.service.MeetingRoomBorrowRecordService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +34,7 @@ public class MeetingRoomBorrowController {
     @PostMapping("/list/page")
     public BaseResponse<Page<MeetingRoomBorrowRecord>> listMeetingRoomBorrowRecordByPage(@RequestBody MeetingRoomBorrowRecordQueryRequest
                                                                                    meetingRoomBorrowRecordQueryRequest,
-                                                                                    HttpServletRequest request) {
+                                                                                         HttpServletRequest request) {
         long current = meetingRoomBorrowRecordQueryRequest.getCurrent();
         long size = meetingRoomBorrowRecordQueryRequest.getPageSize();
         Page<MeetingRoomBorrowRecord> meetingRoomBorrowRecordPage = meetingRoomBorrowRecordService.page(new Page<>(current, size),
@@ -91,7 +88,7 @@ public class MeetingRoomBorrowController {
      * @return
      */
     @PostMapping("/update")
-    public BaseResponse<Void> updateMeetingRoom(@RequestBody MeetingRoomBorrowRecordUpdateRequest meetingRoomBorrowRecordUpdateRequest){
+    public BaseResponse<Void> updateMeetingRoomBorrowRecord(@RequestBody MeetingRoomBorrowRecordUpdateRequest meetingRoomBorrowRecordUpdateRequest){
         if(meetingRoomBorrowRecordService.updateMeetingRoomBorrowRecord(meetingRoomBorrowRecordUpdateRequest)){
             return ResultUtils.success(null);
         }
@@ -105,11 +102,19 @@ public class MeetingRoomBorrowController {
      */
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.MEETING_ROOM_ADMIN)
-    public BaseResponse<Void> deleteMeetingRoom(@RequestBody DeleteRequest deleteRequest){
+    public BaseResponse<Void> deleteMeetingRoomBorrowRecord(@RequestBody DeleteRequest deleteRequest){
         if(meetingRoomBorrowRecordService.deleteMeetingRoomBorrowRecord(deleteRequest)){
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
     }
-    
+
+    @GetMapping("/get/owner")
+    public BaseResponse<Long> getMeetingRoomBorrowOwner(String meetingRoomId){
+        Long userId = meetingRoomBorrowRecordService.getMeetingRoomBorrowOwner(meetingRoomId);
+        if(userId == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"该会议室空闲");
+    }
 }
