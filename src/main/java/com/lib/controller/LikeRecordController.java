@@ -11,8 +11,10 @@ import com.lib.model.dto.likeRecord.LikeRecordAddRequest;
 import com.lib.model.dto.likeRecord.LikeRecordCancelRequest;
 import com.lib.model.dto.likeRecord.LikeRecordQueryRequest;
 import com.lib.model.entity.LikeRecord;
+import com.lib.model.entity.User;
 import com.lib.model.vo.LikeRecordVO;
 import com.lib.service.LikeRecordService;
+import com.lib.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,10 @@ import java.util.List;
 public class LikeRecordController {
     @Resource
     private LikeRecordService likeRecordService;
-    
+
+    @Resource
+    private UserService userService;
+
     /**
      * 分页获取点赞记录列表
      *
@@ -66,7 +71,7 @@ public class LikeRecordController {
         Page<LikeRecord> likeRecordPage = likeRecordService.page(new Page<>(current, size),
                 likeRecordService.getQueryWrapper(likeRecordQueryRequest));
         Page<LikeRecordVO> likeRecordVOPage = new Page<>(current, size, likeRecordPage.getTotal());
-        List<LikeRecordVO> likeRecordVO = likeRecordService.getLikeRecordVO(likeRecordPage.getRecords());
+        List<LikeRecordVO> likeRecordVO = likeRecordService.getLikeRecordVO(likeRecordPage.getRecords(),request);
         likeRecordVOPage.setRecords(likeRecordVO);
         return ResultUtils.success(likeRecordVOPage);
     }
@@ -85,44 +90,24 @@ public class LikeRecordController {
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
     }
 
+
     /**
-     * 添加点赞记录
-     * @param likeRecordAddRequest 点赞记录添加请求
-     * @return
+     * 点赞 / 取消点赞
+     *
+     * @param likeRecordAddRequest
+     * @param request
+     * @return resultNum 本次点赞变化数
      */
     @PostMapping("/like")
-    public BaseResponse<Boolean> like(@RequestBody LikeRecordAddRequest likeRecordAddRequest,
-                                               HttpServletRequest request){
-        if(likeRecordService.like(likeRecordAddRequest,request)){
-            return ResultUtils.success(null);
+    public BaseResponse<Integer> doLike(@RequestBody LikeRecordAddRequest likeRecordAddRequest,
+                                         HttpServletRequest request) {
+        if (likeRecordAddRequest == null || likeRecordAddRequest.getCommentId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
-    }
-
-    /**
-     * 取消点赞
-     * @param likeRecordCancelRequest 取消点赞请求
-     * @return
-     */
-    @PostMapping("/cancel")
-    public BaseResponse<Boolean> cancelLike(@RequestBody LikeRecordCancelRequest likeRecordCancelRequest,
-                                               HttpServletRequest request){
-        if(likeRecordService.cancelLike(likeRecordCancelRequest,request)){
-            return ResultUtils.success(null);
-        }
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
-    }
-
-    /**
-     * 删除点赞记录
-     * @param deleteRequest 删除请求
-     * @return
-     */
-    @PostMapping("/delete") 
-    public BaseResponse<Void> deleteLikeRecord(@RequestBody DeleteRequest deleteRequest){
-        if(likeRecordService.deleteLikeRecord(deleteRequest)){
-            return ResultUtils.success(null);
-        }
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
+        // 登录才能点赞
+        final User loginUser = userService.getLoginUser(request);
+        long commentId = likeRecordAddRequest.getCommentId();
+        int result = likeRecordService.doCommentLike(commentId, loginUser);
+        return ResultUtils.success(result);
     }
 }

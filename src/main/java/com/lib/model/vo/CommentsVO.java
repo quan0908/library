@@ -45,6 +45,8 @@ public class CommentsVO implements Serializable {
      */
     private Integer likeNumber;
 
+    private boolean isLike;
+
     /**
      * 0-待审核 1-审核通过 2-审核未通过
      */

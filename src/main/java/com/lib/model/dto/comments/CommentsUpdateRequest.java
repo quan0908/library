@@ -23,5 +23,10 @@ public class CommentsUpdateRequest implements Serializable {
      */
     private Integer isChecked;
 
+    /**
+     * 评论内容
+     */
+    private String content;
+
     private static final long serialVersionUID = 1L;
 }

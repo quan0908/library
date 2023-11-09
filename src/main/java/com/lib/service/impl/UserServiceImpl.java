@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lib.common.ErrorCode;
 import com.lib.constant.CommonConstant;
+import com.lib.constant.UserConstant;
 import com.lib.exception.BusinessException;
 import com.lib.model.dto.user.UserQueryRequest;
 import com.lib.model.entity.User;
@@ -251,6 +252,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq(id != null, "id", id);
         queryWrapper.eq(idCard != null, "idCard", idCard);
         queryWrapper.eq(StringUtils.isNotBlank(role), "role", role);
+        queryWrapper.ne("role",UserConstant.BAN_ROLE);
         queryWrapper.like(StringUtils.isNotBlank(username), "username", username);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);

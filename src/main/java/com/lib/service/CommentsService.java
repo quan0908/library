@@ -6,7 +6,6 @@ import com.lib.model.dto.comments.CommentsAddRequest;
 import com.lib.model.dto.comments.CommentsQueryRequest;
 import com.lib.model.dto.comments.CommentsUpdateRequest;
 import com.lib.model.entity.Comments;
-import com.lib.model.entity.Comments;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lib.model.vo.CommentsVO;
 
@@ -31,7 +30,7 @@ public interface CommentsService extends IService<Comments> {
      * @param commentsList 评论集合
      * @return
      */
-    List<CommentsVO> getCommentsVO(List<Comments> commentsList);
+    List<CommentsVO> getCommentsVO(List<Comments> commentsList,HttpServletRequest request);
 
     /**
      * 获取评论信息VO
@@ -39,7 +38,7 @@ public interface CommentsService extends IService<Comments> {
      * @param comments
      * @return
      */
-    CommentsVO getCommentsVO(Comments comments);
+    CommentsVO getCommentsVO(Comments comments, HttpServletRequest request);
 
     /**
      * 添加评论
@@ -61,4 +60,8 @@ public interface CommentsService extends IService<Comments> {
      * @return
      */
     boolean deleteComments(DeleteRequest deleteRequest);
+
+    boolean passComment(Long id, HttpServletRequest request);
+
+    boolean unPassComment(Long id, HttpServletRequest request);
 }

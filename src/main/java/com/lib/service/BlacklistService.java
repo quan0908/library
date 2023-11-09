@@ -3,11 +3,11 @@ package com.lib.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lib.common.DeleteRequest;
 import com.lib.model.dto.blacklist.BlacklistAddRequest;
+import com.lib.model.dto.blacklist.BlacklistMoveOutRequest;
 import com.lib.model.dto.blacklist.BlacklistQueryRequest;
 import com.lib.model.dto.blacklist.BlacklistUpdateRequest;
 import com.lib.model.entity.Blacklist;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lib.model.entity.Blacklist;
 import com.lib.model.vo.BlacklistVO;
 
 import java.util.List;
@@ -60,4 +60,7 @@ public interface BlacklistService extends IService<Blacklist> {
      * @return
      */
     boolean deleteBlacklist(DeleteRequest deleteRequest);
+
+    boolean moveOutBlackList(BlacklistMoveOutRequest blacklistMoveOutRequest);
+
 }

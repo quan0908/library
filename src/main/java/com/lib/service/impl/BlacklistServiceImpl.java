@@ -1,5 +1,4 @@
 package com.lib.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -7,24 +6,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
 import com.lib.constant.CommonConstant;
+import com.lib.constant.UserConstant;
 import com.lib.exception.BusinessException;
+import com.lib.exception.ThrowUtils;
+import com.lib.mapper.BlacklistMapper;
 import com.lib.model.dto.blacklist.BlacklistAddRequest;
+import com.lib.model.dto.blacklist.BlacklistMoveOutRequest;
 import com.lib.model.dto.blacklist.BlacklistQueryRequest;
 import com.lib.model.dto.blacklist.BlacklistUpdateRequest;
-import com.lib.model.dto.blacklist.BlacklistAddRequest;
-import com.lib.model.dto.blacklist.BlacklistQueryRequest;
-import com.lib.model.dto.blacklist.BlacklistUpdateRequest;
-import com.lib.model.entity.Blacklist;
 import com.lib.model.entity.Blacklist;
 import com.lib.model.entity.User;
 import com.lib.model.vo.BlacklistVO;
-import com.lib.model.vo.BlacklistVO;
-import com.lib.model.vo.UserVO;
 import com.lib.service.BlacklistService;
-import com.lib.mapper.BlacklistMapper;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -102,14 +97,19 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
         Long userId = blacklistAddRequest.getUserId();
 
-        if(userId == null){
+        if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         //转成blacklist并加入数据库
         Blacklist blacklist = new Blacklist();
         blacklist.setBlackUserId(userId);
-        BeanUtils.copyProperties(blacklistAddRequest,blacklist);
+        //将用户的角色改成ban
+        User user = new User();
+        user.setId(userId);
+        user.setRole(UserConstant.BAN_ROLE);
+        userService.updateById(user);
+        BeanUtils.copyProperties(blacklistAddRequest, blacklist);
         return this.save(blacklist);
     }
 
@@ -150,12 +150,24 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
      */
     @Override
     public boolean deleteBlacklist(DeleteRequest deleteRequest) {
-        if(deleteRequest == null){
+        if (deleteRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         Long blacklistId = deleteRequest.getId();
         return this.removeById(blacklistId);
+    }
+
+    @Override
+    public boolean moveOutBlackList(BlacklistMoveOutRequest blacklistMoveOutRequest) {
+        Long id = blacklistMoveOutRequest.getId();
+        Long userId = blacklistMoveOutRequest.getUserId();
+        ThrowUtils.throwIf(id == null || userId == null, ErrorCode.PARAMS_ERROR);
+        User user = new User();
+        user.setId(userId);
+        user.setRole(UserConstant.DEFAULT_ROLE);
+
+        return userService.updateById(user) && this.removeById(id);
     }
 }
 

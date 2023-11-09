@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class CommentController {
         Page<Comments> commentsPage = commentsService.page(new Page<>(current, size),
                 commentsService.getQueryWrapper(commentsQueryRequest));
         Page<CommentsVO> commentsVOPage = new Page<>(current, size, commentsPage.getTotal());
-        List<CommentsVO> commentsVO = commentsService.getCommentsVO(commentsPage.getRecords());
+        List<CommentsVO> commentsVO = commentsService.getCommentsVO(commentsPage.getRecords(),request);
         commentsVOPage.setRecords(commentsVO);
         return ResultUtils.success(commentsVOPage);
     }
@@ -98,7 +99,6 @@ public class CommentController {
      * @return
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Void> updateComments(@RequestBody CommentsUpdateRequest commentsUpdateRequest,HttpServletRequest request){
         if(commentsService.updateComments(commentsUpdateRequest,request)){
             return ResultUtils.success(null);
@@ -118,5 +118,29 @@ public class CommentController {
             return ResultUtils.success(null);
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"删除失败");
+    }
+    @PostMapping("/pass")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    public BaseResponse passComment(@RequestBody  Long id, HttpServletRequest request){
+        if(id == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean flag = commentsService.passComment(id,request);
+        if(flag){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
+    }
+    @PostMapping("/unPass")
+    @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
+    public BaseResponse unPassComment(@RequestBody  Long id, HttpServletRequest request){
+        if(id == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean flag = commentsService.unPassComment(id,request);
+        if(flag){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
     }
 }

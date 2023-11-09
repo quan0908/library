@@ -42,11 +42,6 @@ public class LikeRecord implements Serializable {
      */
     private Date updateTime;
 
-    @TableLogic
-    /**
-     * 0-不删 1删
-     */
-    private Integer isDelete;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

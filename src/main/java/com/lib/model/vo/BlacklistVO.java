@@ -16,7 +16,7 @@ public class BlacklistVO implements Serializable {
     private Long id;
 
     /**
-     * 用户id
+     * 用户
      */
     private User blackUser;
 

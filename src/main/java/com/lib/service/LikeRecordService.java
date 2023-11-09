@@ -7,6 +7,7 @@ import com.lib.model.dto.likeRecord.LikeRecordAddRequest;
 import com.lib.model.dto.likeRecord.LikeRecordCancelRequest;
 import com.lib.model.dto.likeRecord.LikeRecordQueryRequest;
 import com.lib.model.entity.LikeRecord;
+import com.lib.model.entity.User;
 import com.lib.model.vo.LikeRecordVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,15 +31,15 @@ public interface LikeRecordService extends IService<LikeRecord> {
      * @param likeRecordList 点赞记录集合
      * @return
      */
-    List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> likeRecordList);
+    List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> likeRecordList,HttpServletRequest request);
 
     /**
      * 获取点赞记录信息
      *
-     * @param meetingRecord
+     * @param likeRecord
      * @return
      */
-    LikeRecordVO getLikeRecordVO(LikeRecord likeRecord);
+    LikeRecordVO getLikeRecordVO(LikeRecord likeRecord,HttpServletRequest request);
 
     /**
      * 添加点赞记录
@@ -54,20 +55,10 @@ public interface LikeRecordService extends IService<LikeRecord> {
      */
     boolean deleteLikeRecord(DeleteRequest deleteRequest);
 
-    /**
-     * 点赞
-     * @param likeRecordAddRequest 点赞记录添加请求
-     * @param request
-     * @return
-     */
-    boolean like(LikeRecordAddRequest likeRecordAddRequest,HttpServletRequest request);
 
-    /**
-     * 取消点赞
-     * @param likeRecordCancelRequest 点赞取消请求
-     * @param request
-     * @return
-     */
-    boolean cancelLike(LikeRecordCancelRequest likeRecordCancelRequest,HttpServletRequest request);
 
+    int doCommentLike(long commentId, User loginUser);
+
+
+    int doCommentLikeInner(long userId, long commentId);
 }

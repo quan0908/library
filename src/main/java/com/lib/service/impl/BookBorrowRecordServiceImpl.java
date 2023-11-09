@@ -117,6 +117,7 @@ public class BookBorrowRecordServiceImpl extends ServiceImpl<BookBorrowRecordMap
         bookBorrowRecordVO.setBorrowDays(bookBorrowRecord.getBorrowDays());
         bookBorrowRecordVO.setId(bookBorrowRecord.getId());
         bookBorrowRecordVO.setCreateTime(bookBorrowRecord.getCreateTime());
+        bookBorrowRecordVO.setIsReturned(bookBorrowRecord.getIsReturned());
         return bookBorrowRecordVO;
     }
 

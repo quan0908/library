@@ -19,7 +19,7 @@ CREATE TABLE if not exists book
     id           bigint                             NOT NULL COMMENT '图书id',
     bookName     varchar(128)                       NOT NULL COMMENT '图书名',
     bookNumber   int                                NOT NULL COMMENT '图书数量',
-    bookRemaining int                               NOT NULL COMMENT '图书可借数量',
+    bookRemaining int                               NOT NULL default bookNumber COMMENT '图书可借数量',
     type         varchar(128)                       NOT NULL COMMENT '图书分类',
     bookLocation varchar(128)                       NOT NULL COMMENT '图书位置',
     bookAuthor   varchar(128)                       NOT NULL COMMENT '图书作者',
@@ -142,8 +142,7 @@ create table if not exists like_record
     commentId  bigint                             not null comment '评论id',
     userId     bigint                             not null comment '用户id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
 )
 
 

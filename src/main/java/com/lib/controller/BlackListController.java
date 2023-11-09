@@ -10,6 +10,7 @@ import com.lib.constant.UserConstant;
 import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.blacklist.BlacklistAddRequest;
+import com.lib.model.dto.blacklist.BlacklistMoveOutRequest;
 import com.lib.model.dto.blacklist.BlacklistQueryRequest;
 import com.lib.model.dto.blacklist.BlacklistUpdateRequest;
 import com.lib.model.entity.Blacklist;
@@ -92,10 +93,21 @@ public class BlackListController {
         }
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"添加失败");
     }
-
+    @PostMapping("/out")
+    @AuthCheck(mustRole = UserConstant.SUPER_ADMIN)
+    public BaseResponse moveOutBlackList(@RequestBody BlacklistMoveOutRequest blacklistMoveOutRequest){
+        if(blacklistMoveOutRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean flag = blacklistService.moveOutBlackList(blacklistMoveOutRequest);
+        if(flag){
+            return ResultUtils.success(null);
+        }
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
+    }
     /**
-     * 修改图黑名单
-     * @param blacklistUpdateRequest 图黑名单修改请求
+     * 修改黑名单
+     * @param blacklistUpdateRequest 黑名单修改请求
      * @return
      */
     @PostMapping("/update")
@@ -108,7 +120,7 @@ public class BlackListController {
     }
 
     /**
-     * 删除图黑名单
+     * 删除黑名单
      * @param deleteRequest 删除请求
      * @return
      */

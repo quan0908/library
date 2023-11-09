@@ -1,5 +1,6 @@
 package com.lib.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -8,21 +9,25 @@ import com.lib.common.DeleteRequest;
 import com.lib.common.ErrorCode;
 import com.lib.constant.CommonConstant;
 import com.lib.exception.BusinessException;
+import com.lib.mapper.CommentsMapper;
+import com.lib.mapper.LikeRecordMapper;
 import com.lib.model.dto.comments.CommentsAddRequest;
 import com.lib.model.dto.comments.CommentsQueryRequest;
 import com.lib.model.dto.comments.CommentsUpdateRequest;
 import com.lib.model.entity.Book;
 import com.lib.model.entity.Comments;
+import com.lib.model.entity.LikeRecord;
 import com.lib.model.entity.User;
-import com.lib.model.vo.CommentsVO;
 import com.lib.model.vo.BookVO;
+import com.lib.model.vo.CommentsVO;
 import com.lib.model.vo.UserVO;
 import com.lib.service.BookService;
 import com.lib.service.CommentsService;
-import com.lib.mapper.CommentsMapper;
+import com.lib.service.LikeRecordService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,6 +45,9 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
 
     @Resource
     private BookService bookService;
+
+    @Resource
+    private LikeRecordMapper likeRecordMapper;
 
     /**
      * 获取查询条件
@@ -71,35 +79,40 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
 
     /**
      * 获取全部的评论记录VO
+     *
      * @param commentsList
      * @return
      */
     @Override
-    public List<CommentsVO> getCommentsVO(List<Comments> commentsList) {
+    public List<CommentsVO> getCommentsVO(List<Comments> commentsList, HttpServletRequest request) {
+
         if (CollectionUtils.isEmpty(commentsList)) {
             return new ArrayList<>();
         }
-        return commentsList.stream().map(this::getCommentsVO).collect(Collectors.toList());
+        return commentsList.stream().map(item ->
+                this.getCommentsVO(item, request)
+        ).collect(Collectors.toList());
     }
 
     /**
      * 获取评论记录VO
+     *
      * @param comments
      * @return
      */
     @Override
-    public CommentsVO getCommentsVO(Comments comments) {
-        if(comments == null){
+    public CommentsVO getCommentsVO(Comments comments, HttpServletRequest request) {
+        if (comments == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         //获取commentVO
-        if(this.getById(comments) == null){
+        if (this.getById(comments) == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         CommentsVO commentsVO = CommentsVO.objToVo(comments);
-        
+
         //获取userVO
         Long userId = comments.getUserId();
         User user = userService.getById(userId);
@@ -127,6 +140,17 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
         commentsVO.setUserVO(userVO);
         commentsVO.setBookVO(bookVO);
         commentsVO.setCheckUserVO(checkUserVO);
+        User loginUser = userService.getLoginUser(request);
+        //从记录表中查询出来
+        if(loginUser!=null){
+            QueryWrapper<LikeRecord> likeRecordQueryWrapper = new QueryWrapper<>();
+            likeRecordQueryWrapper.eq("commentId",comments.getId());
+            likeRecordQueryWrapper.eq("userId",loginUser.getId());
+            LikeRecord likeRecord =likeRecordMapper.selectOne(likeRecordQueryWrapper);
+
+            commentsVO.setLike(likeRecord != null);
+        }
+
         return commentsVO;
     }
 
@@ -171,27 +195,9 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
      */
     @Override
     public boolean updateComments(CommentsUpdateRequest commentsUpdateRequest,HttpServletRequest request) {
-        //参数校验
-        if(commentsUpdateRequest == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-
-        Long commentId = commentsUpdateRequest.getId();
-        Integer isChecked = commentsUpdateRequest.getIsChecked();
-
-        if(commentId == null || isChecked == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        //判断数据库中是否有这个数据
-        Comments comments = this.getById(commentId);
-        if(comments == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        //进行修改
-        User user = userService.getLoginUser(request);
-        comments.setCheckUserId(user.getId());
-        comments.setIsChecked(isChecked);
-        return this.updateById(comments);
+        Comments comments = new Comments();
+        BeanUtil.copyProperties(commentsUpdateRequest,comments);
+        return updateById(comments);
     }
 
     /**
@@ -201,12 +207,32 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
      */
     @Override
     public boolean deleteComments(DeleteRequest deleteRequest) {
-        if(deleteRequest == null){
+        if (deleteRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         Long bookId = deleteRequest.getId();
         return this.removeById(bookId);
+    }
+
+    @Override
+    public boolean passComment(Long id, HttpServletRequest request) {
+        Comments comments = new Comments();
+        comments.setId(id);
+        comments.setIsChecked(1);
+        User loginUser = userService.getLoginUser(request);
+        comments.setCheckUserId(loginUser.getId());
+        return updateById(comments);
+    }
+
+    @Override
+    public boolean unPassComment(Long id, HttpServletRequest request) {
+        Comments comments = new Comments();
+        comments.setId(id);
+        comments.setIsChecked(2);
+        User loginUser = userService.getLoginUser(request);
+        comments.setCheckUserId(loginUser.getId());
+        return updateById(comments);
     }
 }
 

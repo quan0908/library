@@ -19,8 +19,10 @@ import com.lib.service.CommentsService;
 import com.lib.service.LikeRecordService;
 import com.lib.service.UserService;
 import com.lib.utils.SqlUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -63,15 +65,15 @@ public class LikeRecordServiceImpl extends ServiceImpl<LikeRecordMapper, LikeRec
     }
 
     @Override
-    public List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> likeRecordList) {
+    public List<LikeRecordVO> getLikeRecordVO(List<LikeRecord> likeRecordList,HttpServletRequest request) {
         if (CollectionUtils.isEmpty(likeRecordList)) {
             return new ArrayList<>();
         }
-        return likeRecordList.stream().map(this::getLikeRecordVO).collect(Collectors.toList());
+        return likeRecordList.stream().map(item->getLikeRecordVO(item,request)).collect(Collectors.toList());
     }
 
     @Override
-    public LikeRecordVO getLikeRecordVO(LikeRecord likeRecord) {
+    public LikeRecordVO getLikeRecordVO(LikeRecord likeRecord, HttpServletRequest request) {
         if (likeRecord == null) {
             return null;
         }
@@ -94,7 +96,7 @@ public class LikeRecordServiceImpl extends ServiceImpl<LikeRecordMapper, LikeRec
         if(comments == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        CommentsVO commentsVO = commentsService.getCommentsVO(comments);
+        CommentsVO commentsVO = commentsService.getCommentsVO(comments,request);
         LikeRecordVO likeRecordVO = new LikeRecordVO();
         BeanUtils.copyProperties(likeRecord,likeRecordVO);
         likeRecordVO.setUserVO(userVO);
@@ -141,69 +143,65 @@ public class LikeRecordServiceImpl extends ServiceImpl<LikeRecordMapper, LikeRec
         return this.removeById(likeRecordId);
     }
 
-    /**
-     * 点赞
-     * @param likeRecordAddRequest 点赞记录添加请求
-     * @param request
-     * @return
-     */
+
+
     @Override
-    public boolean like(LikeRecordAddRequest likeRecordAddRequest, HttpServletRequest request) {
-        if(likeRecordAddRequest == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-
-        Long commentId = likeRecordAddRequest.getCommentId();
-        if(commentId == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-
-        //添加点赞记录
-        if(!this.addLikeRecord(likeRecordAddRequest,request)){
-            return false;
-        }
-
-        //评论点赞+1
+    public int doCommentLike(long commentId, User loginUser) {
+        // 判断实体是否存在，根据类别获取实体
         Comments comments = commentsService.getById(commentId);
-        comments.setLikeNumber(comments.getLikeNumber() + 1);
-        return commentsService.updateById(comments);
+
+
+        if (comments == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 是否已点赞
+        long userId = loginUser.getId();
+        // 每个用户串行点赞
+        // 锁必须要包裹住事务方法
+        LikeRecordService likeRecordService = (LikeRecordService) AopContext.currentProxy();
+        synchronized (String.valueOf(userId).intern()) {
+            return likeRecordService.doCommentLikeInner(userId,commentId );
+        }
     }
 
-    /**
-     * 取消点赞
-     * @param likeRecordCancelRequest 点赞取消请求
-     * @param request
-     * @return
-     */
     @Override
-    public boolean cancelLike(LikeRecordCancelRequest likeRecordCancelRequest, HttpServletRequest request) {
-        if(likeRecordCancelRequest == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public int doCommentLikeInner(long userId, long commentId) {
+        LikeRecord likeRecord = new LikeRecord();
+        likeRecord.setUserId(userId);
+        likeRecord.setCommentId(commentId);
 
-        Long commentId = likeRecordCancelRequest.getCommentId();
-        if(commentId == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        QueryWrapper<LikeRecord> likeQueryWrapper = new QueryWrapper<>(likeRecord);
+        LikeRecord oldlikeRecord= this.getOne(likeQueryWrapper);
+        boolean result;
+        // 已点赞
+        if (oldlikeRecord != null) {
+            result = this.remove(likeQueryWrapper);
+            if (result) {
+                // 点赞数 - 1
+                result = commentsService.update()
+                        .eq("id", commentId)
+                        .gt("likeNumber", 0)
+                        .setSql("likeNumber = likeNumber - 1")
+                        .update();
+                return result ? -1 : 0;
+            } else {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            }
+        } else {
+            // 未点赞
+            result = this.save(likeRecord);
+            if (result) {
+                // 点赞数 + 1
+                result = commentsService.update()
+                        .eq("id", commentId)
+                        .setSql("likeNumber = likeNumber + 1")
+                        .update();
+                return result ? 1 : 0;
+            } else {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            }
         }
-        User user = userService.getLoginUser(request);
-        Long userId = user.getId();
-        QueryWrapper<LikeRecord> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId",userId);
-        queryWrapper.eq("commentId",commentId);
-        LikeRecord likeRecord = this.getOne(queryWrapper);
-
-        //删除点赞记录
-        Long id = likeRecord.getId();
-        DeleteRequest deleteRequest = new DeleteRequest();
-        deleteRequest.setId(id);
-        if(!this.deleteLikeRecord(deleteRequest)){
-            return false;
-        }
-
-        //评论点赞减1
-        Comments comments = commentsService.getById(commentId);
-        comments.setLikeNumber(comments.getLikeNumber() - 1);
-        return commentsService.updateById(comments);
     }
 }
 
