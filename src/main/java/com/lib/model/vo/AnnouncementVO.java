@@ -1,7 +1,7 @@
 package com.lib.model.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.lib.model.entity.Announcement;
+import com.lib.model.entity.Appeal;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -41,11 +41,11 @@ public class AnnouncementVO implements Serializable {
      * @param announcementVO
      * @return
      */
-    public static Announcement voToObj(AnnouncementVO announcementVO) {
+    public static Appeal voToObj(AnnouncementVO announcementVO) {
         if (announcementVO == null) {
             return null;
         }
-        Announcement announcement = new Announcement();
+        Appeal announcement = new Appeal();
         BeanUtils.copyProperties(announcementVO, announcement);
         
         return announcement;
@@ -57,7 +57,7 @@ public class AnnouncementVO implements Serializable {
      * @param announcement
      * @return
      */
-    public static AnnouncementVO objToVo(Announcement announcement) {
+    public static AnnouncementVO objToVo(Appeal announcement) {
         if (announcement == null) {
             return null;
         }

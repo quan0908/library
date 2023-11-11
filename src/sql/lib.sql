@@ -116,24 +116,30 @@ CREATE TABLE if not exists user
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE if not exists announcement(
-    id          bigint      PRIMARY KEY   COMMENT '公告id',
-    content     text        NOT NULL      COMMENT '公告内容',
-    creatorId   bigint      NOT NULL      COMMENT '公告发布人',
-    createTime datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint      NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
-);
+CREATE TABLE if not exists announcement
+(
+    id         bigint PRIMARY KEY COMMENT '公告id',
+    content    text                               NOT NULL COMMENT '公告内容',
+    creatorId  bigint                             NOT NULL COMMENT '公告发布人',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE if not exists meeting_record(
-    id           bigint       primary key comment '会议记录id',
-    meetingRoomId   bigint        NOT NULL    comment '会议室id',
-    participantId  bigint     NOT NULL    comment '参与人id',
-    status       int          default 0   NOT NULL comment '0-未审核 1-同意 2-不同意',
-    createTime datetime       default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime datetime       default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete   tinyint        NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
-);
+CREATE TABLE if not exists meeting_record
+(
+    id            bigint primary key comment '会议记录id',
+    meetingRoomId bigint                             NOT NULL comment '会议室id',
+    participantId bigint                             NOT NULL comment '参与人id',
+    status        int      default 0                 NOT NULL comment '0-未审核 1-同意 2-不同意',
+    createTime    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete      tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
 
 create table if not exists like_record
@@ -143,6 +149,21 @@ create table if not exists like_record
     userId     bigint                             not null comment '用户id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
-)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
+
+create table if not exists appeal
+(
+    id         bigint primary key comment 'id',
+    userId     bigint                             not null comment '申请用户',
+    userReason text                               not null comment '用户解封理由',
+    status     tinyint                            not null default 0 comment '0 - 等待图书管理审核 1-等待系统管理员解封 2-解封完成 3-未通过图书管理员审核',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete      tinyint                            NOT NULL DEFAULT '0' COMMENT '0-不删 1删'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 

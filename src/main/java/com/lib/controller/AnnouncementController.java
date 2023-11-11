@@ -11,6 +11,7 @@ import com.lib.exception.BusinessException;
 import com.lib.exception.ThrowUtils;
 import com.lib.model.dto.announcement.*;
 import com.lib.model.entity.Announcement;
+import com.lib.model.entity.Appeal;
 import com.lib.model.vo.AnnouncementVO;
 import com.lib.service.AnnouncementService;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class AnnouncementController {
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.BOOK_ADMIN)
     public BaseResponse<Page<Announcement>> listAnnouncementByPage(@RequestBody AnnouncementQueryRequest announcementQueryRequest,
-                                                   HttpServletRequest request) {
+                                                                   HttpServletRequest request) {
         long current = announcementQueryRequest.getCurrent();
         long size = announcementQueryRequest.getPageSize();
 

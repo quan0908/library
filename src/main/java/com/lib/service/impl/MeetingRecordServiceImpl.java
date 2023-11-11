@@ -238,10 +238,10 @@ public class MeetingRecordServiceImpl extends ServiceImpl<MeetingRecordMapper, M
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        Long meetingRoomId = meetingRecordUpdateRequest.getMeetingRoomId();
-        if(meetingRoomId == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+//        Long meetingRoomId = meetingRecordUpdateRequest.getMeetingRoomId();
+//        if(meetingRoomId == null){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
 
         MeetingRecord meetingRecord = new MeetingRecord();
         BeanUtils.copyProperties(meetingRecordUpdateRequest,meetingRecord);

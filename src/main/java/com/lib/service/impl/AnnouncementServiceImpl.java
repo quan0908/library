@@ -12,6 +12,7 @@ import com.lib.model.dto.announcement.AnnouncementAddRequest;
 import com.lib.model.dto.announcement.AnnouncementQueryRequest;
 import com.lib.model.dto.announcement.AnnouncementUpdateRequest;
 import com.lib.model.entity.Announcement;
+import com.lib.model.entity.Appeal;
 import com.lib.model.entity.User;
 import com.lib.model.vo.AnnouncementVO;
 import com.lib.model.vo.UserVO;
